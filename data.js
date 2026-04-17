@@ -6,50 +6,35 @@ const DEGREE_MIN_CU = 120;
 
 const courses = [
   // Transfer — 12 CU
-  {code:"D265", name:"Critical Thinking: Reason and Evidence", cu:3, cat:"Transfer", term:"Transfer", status:"completed", date:"2025-02-07", assessment:"Transfer",
-    completionNote:"Transferred credit. Argument analysis, evaluating evidence, identifying logical fallacies, constructing sound arguments."},
-  {code:"D386", name:"Hardware and Operating Systems Essentials", cu:3, cat:"Transfer", term:"Transfer", status:"completed", date:"2025-02-07", assessment:"Transfer",
-    completionNote:"Transferred credit (CompTIA A+ equivalent). Computer architecture, CPU, memory, storage, OS concepts, and OS administration basics."},
-  {code:"D370", name:"IT Leadership Foundations", cu:3, cat:"Transfer", term:"Transfer", status:"completed", date:"2025-02-07", assessment:"Transfer",
-    completionNote:"Transferred credit. Leadership theory, team management, communication, and IT change leadership."},
-  {code:"D268", name:"Introduction to Communication: Connecting with Others", cu:3, cat:"Transfer", term:"Transfer", status:"completed", date:"2025-02-07", assessment:"Transfer",
-    completionNote:"Transferred credit. Interpersonal communication, active listening, nonverbal cues, and conflict resolution."},
+  {code:"D265", name:"Critical Thinking: Reason and Evidence", cu:3, cat:"Transfer", term:"Transfer", status:"not_started", assessment:"Transfer"},
+  {code:"D386", name:"Hardware and Operating Systems Essentials", cu:3, cat:"Transfer", term:"Transfer", status:"not_started", assessment:"Transfer"},
+  {code:"D370", name:"IT Leadership Foundations", cu:3, cat:"Transfer", term:"Transfer", status:"not_started", assessment:"Transfer"},
+  {code:"D268", name:"Introduction to Communication: Connecting with Others", cu:3, cat:"Transfer", term:"Transfer", status:"not_started", assessment:"Transfer"},
   // Term 1 — 15 CU completed
-  {code:"ORA1", name:"Orientation", cu:0, cat:"Gen Ed", term:"Term 1", status:"completed", date:"2025-02-05", assessment:"PA",
-    completionNote:"WGU platform orientation. Academic integrity, CU system, student services, degree planning."},
-  {code:"C458", name:"Health, Fitness, and Wellness", cu:4, cat:"Gen Ed", term:"Term 1", status:"completed", date:"2025-03-05", assessment:"OA",
-    completionNote:"Nutrition, exercise science, stress management, and mental health fundamentals."},
-  {code:"C955", name:"Applied Probability and Statistics", cu:3, cat:"Quant", term:"Term 1", status:"completed", date:"2025-06-16", assessment:"OA",
-    completionNote:"Descriptive statistics, probability distributions, hypothesis testing, correlation and regression."},
-  {code:"D491", name:"Introduction to Analytics", cu:2, cat:"Core", term:"Term 1", status:"completed", date:"2025-07-11", assessment:"OA",
-    completionNote:"Analytics fundamentals, data types, visualization basics, and ethical considerations in data analysis."},
-  {code:"D315", name:"Network and Security - Foundations", cu:3, cat:"Core", term:"Term 1", status:"completed", date:"2025-07-22", assessment:"OA",
-    completionNote:"OSI model, TCP/IP, network protocols, firewalls, common threats, and defense-in-depth concepts."},
-  {code:"D388", name:"Fundamentals of Spreadsheets and Data Presentations", cu:3, cat:"Core", term:"Term 1", status:"completed", date:"2025-07-24", assessment:"OA",
-    completionNote:"Excel formulas and functions, pivot tables, charting, data validation, and data presentation best practices."},
+  {code:"ORA1", name:"Orientation", cu:0, cat:"Gen Ed", term:"Term 1", status:"not_started", assessment:"PA"},
+  {code:"C458", name:"Health, Fitness, and Wellness", cu:4, cat:"Gen Ed", term:"Term 1", status:"not_started", assessment:"OA"},
+  {code:"C955", name:"Applied Probability and Statistics", cu:3, cat:"Quant", term:"Term 1", status:"not_started", assessment:"OA"},
+  {code:"D491", name:"Introduction to Analytics", cu:2, cat:"Core", term:"Term 1", status:"not_started", assessment:"OA"},
+  {code:"D315", name:"Network and Security - Foundations", cu:3, cat:"Core", term:"Term 1", status:"not_started", assessment:"OA"},
+  {code:"D388", name:"Fundamentals of Spreadsheets and Data Presentations", cu:3, cat:"Core", term:"Term 1", status:"not_started", assessment:"OA"},
   // Term 2 — 9 CU completed
-  {code:"D278", name:"Scripting and Programming - Foundations", cu:3, cat:"Core", term:"Term 2", status:"completed", date:"2025-10-03", assessment:"OA",
-    completionNote:"Python basics: variables, data types, control flow, functions, collections, and file I/O. Retake after first-term attempt."},
-  {code:"C721", name:"Change Management", cu:3, cat:"Gen Ed", term:"Term 2", status:"completed", date:"2025-10-20", assessment:"PA",
-    completionNote:"ADKAR model, Kotter's 8-step framework, organizational change theory, stakeholder analysis, and change-resistance mitigation."},
-  {code:"C957", name:"Applied Algebra", cu:3, cat:"Quant", term:"Term 2", status:"completed", date:"2026-02-28", assessment:"OA",
-    completionNote:"Linear and quadratic equations, functions, systems of equations, exponential and logarithmic functions."},
+  {code:"D278", name:"Scripting and Programming - Foundations", cu:3, cat:"Core", term:"Term 2", status:"not_started", assessment:"OA"},
+  {code:"C721", name:"Change Management", cu:3, cat:"Gen Ed", term:"Term 2", status:"not_started", assessment:"PA"},
+  {code:"C957", name:"Applied Algebra", cu:3, cat:"Quant", term:"Term 2", status:"not_started", assessment:"OA"},
   // Term 3 — 18 CU enrolled
-  {code:"D333", name:"Ethics in Technology", cu:3, cat:"Gen Ed", term:"Term 3", status:"completed", date:"2026-03-11", assessment:"PA",
-    completionNote:"AI ethics, privacy, intellectual property, data governance, professional conduct, and ethical decision frameworks."},
-  {code:"D276", name:"Web Development Foundations", cu:3, cat:"Core", term:"Term 3", status:"completed", date:"2026-03-24", assessment:"PA",
-    completionNote:"HTML5, CSS3, JavaScript fundamentals, responsive design, and basic accessibility."},
-  {code:"D269", name:"Composition: Writing with a Strategy", cu:3, cat:"Gen Ed", term:"Term 3", status:"in_progress", assessment:"PA",
-    tasks:[{name:"Task 1 — Writing with a Strategy", status:"done", notes:"Submission in progress"}]},
-  {code:"D199", name:"Introduction to Physical and Human Geography", cu:3, cat:"Gen Ed", term:"Term 3", status:"in_progress", assessment:"PA",
+  {code:"D333", name:"Ethics in Technology", cu:3, cat:"Gen Ed", term:"Term 3", status:"not_started", assessment:"PA"},
+  {code:"D276", name:"Web Development Foundations", cu:3, cat:"Core", term:"Term 3", status:"not_started", assessment:"PA"},
+  {code:"D269", name:"Composition: Writing with a Strategy", cu:3, cat:"Gen Ed", term:"Term 3", status:"not_started", assessment:"PA",
+    tasks:[{name:"Task 1 — Writing with a Strategy", status:"queued", notes:"Submission in progress"}]},
+  {code:"D199", name:"Introduction to Physical and Human Geography", cu:3, cat:"Gen Ed", term:"Term 3", status:"not_started", assessment:"PA",
     tasks:[
-      {name:"Task 1 — Analyzing Physical and Human Geography (case study selection)", status:"done", notes:"Work-in-progress on selected case study"},
-      {name:"Task 2 — Analyzing Climate Change (scenario + real-world analysis)", status:"done", notes:"Work-in-progress on selected case study"}
+      {name:"Task 1 — Analyzing Physical and Human Geography (case study selection)", status:"queued", notes:"Work-in-progress on selected case study"},
+      {name:"Task 2 — Analyzing Climate Change (scenario + real-world analysis)", status:"queued", notes:"Work-in-progress on selected case study"}
     ]},
-  {code:"D282", name:"Cloud Foundations", cu:3, cat:"Core", term:"Term 3", status:"in_progress", assessment:"OA",
+  {code:"D282", name:"Cloud Foundations", cu:3, cat:"Core", term:"Term 3", status:"not_started", assessment:"OA",
     cert:"AWS Certified Cloud Practitioner (CLF-C02)",
     topics:["AWS cloud concepts","Core services (EC2, S3, RDS)","Security and compliance","Networking","Storage","Compute","Analytics","Machine learning","Cost and billing","AWS Cloud Practitioner exam prep"]},
-  {code:"C963", name:"American Politics and the US Constitution", cu:3, cat:"Gen Ed", term:"Term 3", status:"in_progress", assessment:"PA",
+  {code:"C963", name:"American Politics and the US Constitution", cu:3, cat:"Gen Ed", term:"Term 3", status:"not_started", assessment:"PA",
     tasks:[
       {name:"Task 1 — Founding Ideologies", status:"queued"},
       {name:"Task 2 — Powers and Structures", status:"queued"},
@@ -240,226 +225,13 @@ const courses = [
 
 // Compute summary stats from data
 
-const jobDetails = {
-  "Machine Learning Engineer":{pay:"$130k–$180k US median (senior: $200k+)", desc:"Builds, tests, and deploys ML models into production systems. Owns the full pipeline from data ingestion to serving. Partners with data scientists and software engineers.", day:"Write training pipelines, tune hyperparameters, ship model updates, monitor drift, optimize inference cost."},
-  "AI Engineer":{pay:"$120k–$170k US median", desc:"Focused on integrating AI services (LLMs, vision APIs, agent frameworks) into product experiences. Less model-from-scratch, more systems-integration.", day:"Prompt engineering, LLM API integration, RAG pipelines, agent orchestration, evaluation harnesses."},
-  "ML/AI Solutions Engineer":{pay:"$110k–$160k US median", desc:"Customer-facing role. Works with enterprise clients to implement ML/AI solutions. Blend of technical depth and communication.", day:"Scope customer problems, build proof-of-concepts, deliver demos, write integration docs, train customer teams."},
-  "Applied Scientist":{pay:"$150k–$220k US median (FAANG often higher)", desc:"Research-flavored. Amazon, Meta, Google use this title for people who read papers, adapt methods to product problems, publish internally.", day:"Literature review, novel model experimentation, A/B test design, technical writeups, cross-team consultation."},
-  "Data Scientist (engineering-leaning)":{pay:"$120k–$170k US median", desc:"Data scientist role with heavy engineering emphasis — building production systems, not just analyzing. Distinct from the pure-analytics DS track.", day:"Feature engineering at scale, production model pipelines, SQL + Python + ML, partner with PMs on metrics."},
-  "AI Architect":{pay:"$180k–$280k+ US median (staff/principal+)", desc:"Designs system architecture for AI products. Makes tradeoffs between cost, performance, and complexity. Leads other engineers.", day:"Write ADRs, review designs, debug cross-system issues, evaluate vendors, coach senior engineers."},
-  "Principal / Staff ML Engineer":{pay:"$220k–$400k+ US median (FAANG: $500k+ total comp)", desc:"Top individual contributor track. Architect-level scope without formal management. Owns technical direction for major initiatives.", day:"Cross-team technical leadership, deep debugging, architecture reviews, mentoring, setting technical standards."},
-  "Senior AI Engineer with architect scope":{pay:"$170k–$250k US median", desc:"Senior engineer who's taken on architect responsibilities without the formal title yet. Common stepping stone to Principal or Architect.", day:"Lead design on major features, mentor, handle escalations, influence roadmap."},
-  "AI Solutions Architect":{pay:"$160k–$240k US median", desc:"Cloud-provider-flavored architect role — AWS, Azure, GCP all hire these. Customer-facing, designs AI solutions on their platform.", day:"Customer architecture workshops, reference implementations, certification maintenance, industry talks."},
-  "Head of AI / Director of ML Engineering":{pay:"$250k–$450k+ US median", desc:"Management path. Leads AI teams, sets organizational strategy, hires and grows engineers. Less hands-on code, more people and product.", day:"1:1s, roadmap planning, budget, hiring, stakeholder mgmt, cross-org strategy."}
-};
+const jobDetails = {};
 
-const skillDetails = {
-  "Deep learning framework (PyTorch)":{why:"Industry standard for neural network development. Hugging Face, OpenAI, Meta, academic research — all PyTorch.", hours:"60–100 hrs to competence", start:[
-    {label:"Andrej Karpathy — Neural Networks: Zero to Hero (YouTube, free)", url:"https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ"},
-    {label:"fast.ai — Practical Deep Learning for Coders", url:"https://course.fast.ai/"},
-    {label:"PyTorch Official Tutorials", url:"https://pytorch.org/tutorials/"}
-  ]},
-  "Classical ML":{why:"Most business problems don't need deep learning. scikit-learn solves more real-world problems than transformers do. Don't skip.", hours:"40–60 hrs", start:[
-    {label:"Hands-On Machine Learning by Aurélien Géron (book)", url:"https://www.oreilly.com/library/view/hands-on-machine-learning/9781098125967/"},
-    {label:"scikit-learn User Guide", url:"https://scikit-learn.org/stable/user_guide.html"},
-    {label:"Kaggle Learn — Intro to Machine Learning", url:"https://www.kaggle.com/learn/intro-to-machine-learning"}
-  ]},
-  "Model evaluation":{why:"The difference between a data scientist who knows what they're doing and one who doesn't. Confusion matrices, ROC curves, cross-validation, overfitting detection.", hours:"20–30 hrs", start:[
-    {label:"scikit-learn Model Selection Guide", url:"https://scikit-learn.org/stable/model_selection.html"},
-    {label:"Google Developers ML Crash Course — Classification", url:"https://developers.google.com/machine-learning/crash-course/classification"},
-    {label:"Cross Validated (Stack Exchange)", url:"https://stats.stackexchange.com/"}
-  ]},
-  "Feature engineering":{why:"Highest-leverage skill in classical ML. A good feature set + simple model beats a bad feature set + fancy model every time.", hours:"30–50 hrs", start:[
-    {label:"Feature Engineering for Machine Learning (Alice Zheng, book)", url:"https://www.oreilly.com/library/view/feature-engineering-for/9781491953235/"},
-    {label:"Kaggle Competitions — learn from winning notebooks", url:"https://www.kaggle.com/competitions"},
-    {label:"Hands-On ML notebooks (Géron)", url:"https://github.com/ageron/handson-ml3"}
-  ]},
-  "MLOps basics":{why:"Getting a model to production is half the job. Versioning, CI/CD, monitoring, retraining. WGU D501 covers this partly.", hours:"40–60 hrs", start:[
-    {label:"Full Stack Deep Learning (free online course)", url:"https://fullstackdeeplearning.com/"},
-    {label:"MLflow Tutorials", url:"https://mlflow.org/docs/latest/tutorials-and-examples/index.html"},
-    {label:"Made With ML — MLOps course", url:"https://madewithml.com/"}
-  ]},
-  "Cloud ML services (SageMaker post-AWS cert)":{why:"Most employers run ML on AWS SageMaker, GCP Vertex AI, or Azure ML. Your AWS CCP opens this door.", hours:"30–50 hrs", start:[
-    {label:"AWS SageMaker Getting Started", url:"https://docs.aws.amazon.com/sagemaker/latest/dg/gs.html"},
-    {label:"AWS Certified Machine Learning – Specialty path", url:"https://aws.amazon.com/certification/certified-machine-learning-specialty/"},
-    {label:"AWS Skill Builder (workshops)", url:"https://skillbuilder.aws/"}
-  ]},
-  "Docker":{why:"Cheapest-to-learn, highest-ROI DevOps skill. You'll use it in every ML and AI Engineer job.", hours:"15–25 hrs", start:[
-    {label:"Docker Get Started", url:"https://docs.docker.com/get-started/"},
-    {label:"Docker Compose Overview", url:"https://docs.docker.com/compose/"},
-    {label:"Docker Hub — browse real images", url:"https://hub.docker.com/"}
-  ]},
-  "Kubernetes basics":{why:"Production ML at scale runs on Kubernetes. You don't need to be an expert — pods, deployments, services is enough.", hours:"30–50 hrs", start:[
-    {label:"Kubernetes Up & Running (book)", url:"https://www.oreilly.com/library/view/kubernetes-up-and/9781098110192/"},
-    {label:"KodeKloud Free Labs", url:"https://kodekloud.com/pages/free-labs"},
-    {label:"minikube — local Kubernetes", url:"https://minikube.sigs.k8s.io/docs/start/"}
-  ]},
-  "LLM fundamentals":{why:"Hottest AI subfield in 2026. Understanding transformers, tokenization, prompting, and fine-tuning is table stakes now.", hours:"40–80 hrs", start:[
-    {label:"Andrej Karpathy — Let's build GPT (YouTube)", url:"https://www.youtube.com/watch?v=kCc8FmEb1nY"},
-    {label:"Hugging Face LLM Course", url:"https://huggingface.co/learn/llm-course"},
-    {label:"3Blue1Brown — But what is a GPT?", url:"https://www.youtube.com/watch?v=wjZofJX0v4M"}
-  ]},
-  "APIs":{why:"Every AI engineer ships APIs. FastAPI is the Python standard. Auth, rate limiting, async — know the basics.", hours:"30–50 hrs", start:[
-    {label:"FastAPI Official Tutorial", url:"https://fastapi.tiangolo.com/tutorial/"},
-    {label:"Designing Web APIs (O'Reilly book)", url:"https://www.oreilly.com/library/view/designing-web-apis/9781492026914/"},
-    {label:"Render — deploy APIs free tier", url:"https://render.com/docs/deploy-fastapi"}
-  ]},
-  "Vector databases (for RAG/LLM work)":{why:"Required for retrieval-augmented generation. pgvector (in Postgres) is the pragmatic pick. Pinecone and Weaviate are specialized.", hours:"20–30 hrs", start:[
-    {label:"pgvector (GitHub)", url:"https://github.com/pgvector/pgvector"},
-    {label:"Pinecone Learn Center", url:"https://www.pinecone.io/learn/"},
-    {label:"Weaviate Quickstart", url:"https://weaviate.io/developers/weaviate/quickstart"}
-  ]},
-  "LLMOps":{why:"Distinct from MLOps. Prompt versioning, eval harnesses, cost tracking, hallucination monitoring. New field, few standards.", hours:"30–50 hrs", start:[
-    {label:"LangSmith Docs", url:"https://docs.smith.langchain.com/"},
-    {label:"Weights & Biases for LLMs", url:"https://wandb.ai/site/solutions/llmops"},
-    {label:"Anthropic Prompt Engineering Guide", url:"https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"}
-  ]},
-  "AI agent frameworks (LangChain, CrewAI)":{why:"2026 wave. Agents that plan, call tools, and iterate. Heavy hiring signal right now.", hours:"30–50 hrs", start:[
-    {label:"LangChain Python Docs", url:"https://python.langchain.com/docs/"},
-    {label:"CrewAI Documentation", url:"https://docs.crewai.com/"},
-    {label:"Anthropic — Building effective agents", url:"https://www.anthropic.com/research/building-effective-agents"}
-  ]},
-  "ML system design":{why:"Core architect skill. Can you whiteboard a recommendation system, fraud detector, or LLM pipeline under constraints?", hours:"60–100 hrs", start:[
-    {label:"Designing Machine Learning Systems (Chip Huyen)", url:"https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/"},
-    {label:"Stanford CS329S — ML Systems Design", url:"https://stanford-cs329s.github.io/"},
-    {label:"Grokking the ML System Design Interview", url:"https://www.educative.io/courses/machine-learning-system-design"}
-  ]},
-  "Distributed training":{why:"Training modern models requires multi-GPU and multi-node. Understanding DDP, tensor/pipeline parallelism matters at architect level.", hours:"40–80 hrs", start:[
-    {label:"PyTorch Distributed Training", url:"https://pytorch.org/tutorials/intermediate/dist_tuto.html"},
-    {label:"DeepSpeed Documentation", url:"https://www.deepspeed.ai/"},
-    {label:"Databricks Generative AI Blog", url:"https://www.databricks.com/blog/category/generative-ai"}
-  ]},
-  "Production monitoring":{why:"Models silently degrade as input data shifts. Monitoring drift and performance is architect-level responsibility.", hours:"30–50 hrs", start:[
-    {label:"Evidently AI Documentation", url:"https://docs.evidentlyai.com/"},
-    {label:"Chip Huyen's Blog (MLOps essays)", url:"https://huyenchip.com/blog/"},
-    {label:"SageMaker Model Monitor", url:"https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor.html"}
-  ]},
-  "Data engineering at scale":{why:"Architects design the pipelines upstream of the models. Spark, Airflow, Kafka, lakehouse patterns.", hours:"60–100 hrs", start:[
-    {label:"The Data Engineering Cookbook (free GitHub)", url:"https://github.com/andkret/Cookbook"},
-    {label:"Apache Airflow Tutorial", url:"https://airflow.apache.org/docs/apache-airflow/stable/tutorial/index.html"},
-    {label:"Fundamentals of Data Engineering (book)", url:"https://www.oreilly.com/library/view/fundamentals-of-data/9781098108298/"}
-  ]},
-  "Deep architecture knowledge":{why:"Transformer internals, attention mechanisms, MoE, diffusion models. Architects need enough depth to evaluate tradeoffs.", hours:"80–120 hrs", start:[
-    {label:"Deep Learning (Goodfellow et al. — free online)", url:"https://www.deeplearningbook.org/"},
-    {label:"The Illustrated Transformer (Jay Alammar)", url:"https://jalammar.github.io/illustrated-transformer/"},
-    {label:"Papers With Code", url:"https://paperswithcode.com/"}
-  ]},
-  "Cross-cloud fluency":{why:"Senior architects aren't locked into one cloud. Know AWS well, Azure and GCP well enough to compare.", hours:"50–80 hrs", start:[
-    {label:"A Cloud Guru (Pluralsight)", url:"https://www.pluralsight.com/cloud-guru"},
-    {label:"AWS Solutions Architect – Associate", url:"https://aws.amazon.com/certification/certified-solutions-architect-associate/"},
-    {label:"Azure AI Engineer Associate (AI-102)", url:"https://learn.microsoft.com/en-us/certifications/azure-ai-engineer/"}
-  ]},
-  "Security for ML (unique lane given cybersec background)":{why:"Your cybersec background is rare in ML. Model adversarial attacks, data poisoning, prompt injection — you can own this niche.", hours:"30–60 hrs", start:[
-    {label:"OWASP ML Security Top 10", url:"https://owasp.org/www-project-machine-learning-security-top-10/"},
-    {label:"Anthropic Research — safety & alignment", url:"https://www.anthropic.com/research"},
-    {label:"NIST AI Risk Management Framework", url:"https://www.nist.gov/itl/ai-risk-management-framework"}
-  ]},
-  "Cost/performance tradeoffs":{why:"GPU time is expensive. Architects decide which model to train, which to fine-tune, when to distill, when to cache. Business-impact skill.", hours:"30–50 hrs", start:[
-    {label:"Designing ML Systems — Ch 8 (Model Deployment)", url:"https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/"},
-    {label:"AWS Pricing Calculator", url:"https://calculator.aws/"},
-    {label:"Anthropic Research — efficient models", url:"https://www.anthropic.com/research"}
-  ]}
-};
+const skillDetails = {};
 
+const milestoneDetails = {};
 
-const milestoneDetails = {
-  "Complete MS (or far enough in to defend it)":{measure:"Graduation or ≥75% through the program with strong grades", deps:"Finish BS first, apply and enroll in MS program. WGU's MS Data Analytics with AI specialization is a natural pick."},
-  "Ship one end-to-end ML project in production (real users or deployed demo)":{measure:"Public URL, non-trivial traffic, runs for at least 3 months without breaking", deps:"Docker + APIs + one deployment platform (Render, Fly.io, AWS). Can start as soon as you have classical ML basics."},
-  "Build one LLM/RAG project":{measure:"Deployed app that answers questions from your own documents. Measurable retrieval quality.", deps:"LLM fundamentals + vector databases + APIs. Can be a resume hero — high hiring signal."},
-  "Move from analyst → engineer title at work (or via job change)":{measure:"Actual title change on LinkedIn and resume. 'ML Engineer' or 'AI Engineer' or adjacent.", deps:"Phase 1 role + 2–3 shipped projects + 1+ year of analyst work. Usually easier via job change than internal promotion."},
-  "At least one paid role using ML in production":{measure:"ML code you wrote running in a paid role, used by customers or internal users.", deps:"Engineer-title role + real ML in the scope of the job. The first one is the hardest; after that, pattern repeats."},
-  "Promoted to Senior ML/AI Engineer or equivalent":{measure:"Senior title + compensation bump + expanded scope. Usually year 4–6 of the career.", deps:"Phase 2 skills solid + 2+ shipped ML systems + positive peer reviews."},
-  "Own at least one full AI system end-to-end in production":{measure:"You designed it, built it (or led the build), and are the on-call for it. It affects business metrics.", deps:"Senior engineer level + org trust + scope to own a full system."},
-  "Mentor at least one junior ML engineer":{measure:"Junior you worked with goes from struggling to shipping on their own, and says you helped.", deps:"Senior level + some patience. Hardest part is actually caring enough to spend the time."},
-  "Give one public talk or blog series on ML architecture":{measure:"Recorded conference talk OR 4+ post blog series OR internal conference-level presentation.", deps:"Architect-level thinking + willingness to be public. Builds the outside-your-company reputation."},
-  "Land AI Architect (or equivalent Principal/Staff) title":{measure:"Title on the business card. Compensation at or above market band for Architect/Principal.", deps:"All prior milestones + visible external reputation + willingness to lead technical direction."}
-};
-
-
-const careerPhases = {
-  2: {
-    title:"AI / ML Engineer", num:"2",
-    subtitle:"Not just analyzing data — building systems that use AI to solve problems, and shipping them to real users. This is where you start looking like an AI person to the market.",
-    timeline:"~2–4 years · overlaps with MS and tail of Phase 1",
-    jobTitles:["Machine Learning Engineer","AI Engineer","ML/AI Solutions Engineer","Applied Scientist","Data Scientist (engineering-leaning)"],
-    alreadyHave:["Network & Security Foundations (WGU D315 + cybersec bootcamp)","CompTIA certifications (3 transfer credits)","Linux/Unix admin (extensive military)","Systems integration (Boomerang + CROW)","All Phase 1 skills carry forward"],
-    skills:[
-      {name:"Deep learning framework (PyTorch)", status:"no_go"},
-      {name:"Classical ML", status:"no_go"},
-      {name:"Model evaluation", status:"no_go"},
-      {name:"Feature engineering", status:"no_go"},
-      {name:"MLOps basics", status:"no_go"},
-      {name:"Cloud ML services (SageMaker post-AWS cert)", status:"no_go"},
-      {name:"Docker", status:"no_go"},
-      {name:"Kubernetes basics", status:"no_go"},
-      {name:"LLM fundamentals", status:"no_go"},
-      {name:"APIs", status:"no_go"},
-      {name:"Vector databases (for RAG/LLM work)", status:"no_go"},
-      {name:"LLMOps", status:"no_go"},
-      {name:"AI agent frameworks (LangChain, CrewAI)", status:"no_go"}
-    ],
-    certs:[],
-    projects:[
-      {name:"One end-to-end ML app", notes:"Model + API + frontend + deployed. Shows you can ship, not just train."},
-      {name:"One LLM/RAG app", notes:"Chat with your documents, or an agent that does a real task. Hot signal right now."},
-      {name:"One deep-theory piece", notes:"Implement a transformer from scratch, a diffusion model, or a custom loss function. Shows depth."},
-      {name:"Military/cybersec angle", notes:"AI-assisted intrusion detection, anomaly detection, log analysis. Your unique lane."}
-    ],
-    milestones:[
-      "Complete MS (or far enough in to defend it)",
-      "Ship one end-to-end ML project in production (real users or deployed demo)",
-      "Build one LLM/RAG project",
-      "Move from analyst → engineer title at work (or via job change)",
-      "At least one paid role using ML in production"
-    ],
-    doneWhen:"You've shipped real ML systems that other people use, and your resume reads \"ML Engineer\" or \"AI Engineer\" — not just \"analyst who uses ML.\""
-  },
-  3: {
-    title:"AI Architect", num:"3",
-    subtitle:"The destination role. Not just building AI systems — designing them, choosing the architecture, making tradeoffs between cost, performance, complexity, and time, and leading others who build. This is where the wizard title lives.",
-    timeline:"~3–6 years from today · depends on Phase 1 and 2 pace",
-    jobTitles:["AI Architect","Principal / Staff ML Engineer","Senior AI Engineer with architect scope","AI Solutions Architect","Head of AI / Director of ML Engineering"],
-    alreadyHave:[
-      "Large-system integration — Boomerang + CROW wire-up is textbook systems-of-systems architecture",
-      "Process redesign at scale — motorpool overhaul, training schedule automation",
-      "Cross-functional leadership — trained ROK Army, multinational coordination, ordnance clearance",
-      "Stakeholder translation — command-level goals → executable plans",
-      "Change Management — WGU C721 (passed), formal vocabulary for what you already did",
-      "Ethics in Technology — WGU D333, relevant for AI governance",
-      "Teaching / documentation — Army training roles, cross-training foreign militaries",
-      "\"Wizard\" reputation already earned once — the hard part. Doing it again in a new domain is easier."
-    ],
-    skills:[
-      {name:"ML system design", status:"no_go"},
-      {name:"Distributed training", status:"no_go"},
-      {name:"Production monitoring", status:"no_go"},
-      {name:"Data engineering at scale", status:"no_go"},
-      {name:"Deep architecture knowledge", status:"no_go"},
-      {name:"Cross-cloud fluency", status:"no_go"},
-      {name:"Security for ML (unique lane given cybersec background)", status:"no_go"},
-      {name:"Cost/performance tradeoffs", status:"no_go"}
-    ],
-    certs:[
-      "AWS Solutions Architect Associate (high hiring weight)",
-      "AWS Certified AI / Generative AI Developer (signals current relevance)",
-      "Microsoft Azure AI Engineer Associate (multi-cloud credibility)"
-    ],
-    projects:[
-      {name:"Track record of ML systems in production at real scale", notes:"Multiple production systems, not one-offs."},
-      {name:"Public talk, blog series, or conference presentation", notes:"At least one visible external artifact."},
-      {name:"Github shows architectural thinking", notes:"Infra-as-code, design docs, ADRs — not just Jupyter notebooks."},
-      {name:"Technical leadership evidence", notes:"Mentored juniors, ran reviews, owned a team's tech direction."}
-    ],
-    milestones:[
-      "Promoted to Senior ML/AI Engineer or equivalent",
-      "Own at least one full AI system end-to-end in production",
-      "Mentor at least one junior ML engineer",
-      "Give one public talk or blog series on ML architecture",
-      "Land AI Architect (or equivalent Principal/Staff) title"
-    ],
-    doneWhen:"People in your org and outside it bring AI problems to you first. The wizard reputation, transferred from the Army context to the AI one. The title catches up to the role you're already playing."
-  }
-};
+const careerPhases = {};
 
 const portfolio = [
   {code:"NJ-REAL", title:"NJ Real Estate Market Analyzer", era:"active", eraLabel:"Active · WGU Portfolio",
@@ -472,7 +244,7 @@ const portfolio = [
     skills:["Python","SQL","SQLite","Tableau Public","Pandas","Google Distance Matrix API","Git / GitHub"]},
   {code:"GRIND", title:"The Grind", era:"active", eraLabel:"Active",
     tag:"Life-gamification app · real action = real XP · multi-agent build via Paperclip",
-    fit:[2,3],
+    fit:[],
     why:"Productivity apps die because they track intentions, not results. People don't want task lists — they want to become someone specific. Stronger, sharper, better career, better health. If the app knew who you wanted to become, generated the quest chain that actually moved you there, and used verified real-world action as the game mechanic, does it finally become the one you stick with?",
     goal:"Ship a life-gamification app. User defines their ideal self — body, mind, career, habits. The app generates a personalized quest chain that systematically builds toward that ideal across workouts, nutrition, behavior, habits, and career pathing. Real-world completion is the game mechanic: phone verifies the action (ran the mile, finished the course, cooked the meal), XP is earned, the in-game avatar levels up alongside the real person.",
     role:"Product architect. Defined the ideal-self → quest chain → real-world verification → XP loop. Built the agent mesh through Paperclip — Grit, Forge, Pixel, and Surge — each agent specialized on a slice of the build (product, code, design, ops) and coordinated through the orchestrator so the whole thing ships like a real product team.",
@@ -480,7 +252,7 @@ const portfolio = [
     skills:["Product architecture","Gamification design","Behavior change design","Multi-agent orchestration","Paperclip","Real-world verification loops","AI quest generation","Mobile tracking integration"]},
   {code:"BCI", title:"BCI EEG Integration · Flow-State Capture", era:"active", eraLabel:"Active",
     tag:"EEG-driven focus amplifier · OpenBCI Cyton pipeline · personal R&D",
-    fit:[2],
+    fit:[],
     why:"Flow state is the peak focus mode — deep concentration, effortless pace, time dilation. It's also maddeningly unreliable. Some study sessions you slip into it, most you don't, and you can't say why. If an EEG can capture what flow actually looks like as a brain-wave signature — isolate it from distracted, fatigued, or restless states — then maybe you can study the signature, figure out what actually triggers it, and build a tool that helps you return to flow on demand when you sit down to study. Replicate the state instead of chasing it.",
     goal:"Build a brain-computer interface pipeline that reads EEG from an OpenBCI Cyton, classifies mental state in real time (flow vs. distracted vs. fatigued), and gives the user feedback they can act on to steer themselves back into focus during study sessions. Personal R&D project aimed at making flow repeatable instead of random.",
     role:"End-to-end architect. Hardware selection (OpenBCI Cyton, 250 Hz, 8 channels), signal-processing pipeline design, real-time ML inference path, feedback-loop design for the user.",
@@ -488,7 +260,7 @@ const portfolio = [
     skills:["Real-time signal processing","EEG preprocessing + artifact removal","Feature extraction from time-series","Streaming ML inference","Hardware integration (OpenBCI / BLE / USB)","Latency profiling","Biosignal privacy + HIPAA-relevant compliance"]},
   {code:"BOOM-CROW", title:"Boomerang + CROW Integration", era:"shipped-army", eraLabel:"Shipped · Army",
     tag:"Intercepted Boomerang data stream upstream of audio and routed it into CROW for auto-slew + zoom",
-    fit:[3],
+    fit:[],
     why:"Under incoming fire, crews don't have seconds to waste. Boomerang already knows the distance and direction of the shot — it's broadcast as an audio alert over comms moments after the round leaves the barrel, and the closer the shooter is, the sharper the fix. If the data is already there, why is a human still translating \"voice in my headset\" into \"hand on a joystick\"? Close the loop.",
     goal:"Route Boomerang's detection data directly into the sector-assigned CROW remotely-operated weapon station before it hit the audio pipeline, so the turret automatically slewed to the source coordinates and zoomed in — giving the gunner an already-acquired target instead of a voice cue.",
     role:"End-to-end integrator. The two systems weren't designed to talk to each other — they were built by different vendors. Sat down with the civilian engineers on each platform, worked out how to capture Boomerang's output upstream of its audio stage and feed the coordinates into CROW's input layer using each system's own base software. Designed the data path, coordinated the vendor-level changes, and deployed to sector-assigned vehicles.",
@@ -496,7 +268,7 @@ const portfolio = [
     skills:["Systems-of-systems integration","Vendor coordination","Intercepting data streams upstream of downstream consumers","Real-time sensor-to-effector pipelines","Signal processing","Weapons systems knowledge","Operational deployment under constraints"]},
   {code:"MOTOR", title:"Motorpool Maintenance Redesign", era:"shipped-army", eraLabel:"Shipped · Army",
     tag:"Process engineering — redesigned an entire department",
-    fit:[3],
+    fit:[],
     why:"Vehicles weren't getting fixed. Parts disappeared into paperwork. Readiness numbers were dropping. If the whole department was broken, patching it wasn't going to work — what would it look like if the process was designed from the ground up to actually deliver repairs?",
     goal:"Take a broken motorpool maintenance workflow, redesign it so vehicles actually get fixed, and get parts tracking that works.",
     role:"Process owner end-to-end. Diagnosis, redesign, rollout, documentation.",
@@ -504,7 +276,7 @@ const portfolio = [
     skills:["Process redesign","Operational documentation","Cross-functional coordination","Change management"]},
   {code:"TRAIN-AUTO", title:"Training Schedule Automation", era:"shipped-army", eraLabel:"Shipped · Army",
     tag:"End-to-end workflow engine for unit training — doctrine, availability, paperwork, CONOP approval",
-    fit:[1,2],
+    fit:[1],
     why:"Every time the unit cycled through a training phase — deployment, post-deployment, train-up — people scrambled with the same bureaucratic chaos: chase clearances, reserve dates, coordinate with range control, book training areas, fight for overlapping windows. Meanwhile the training doctrine was already crystal clear about which certifications were required at which level — individual, team, squad, platoon, unit — with strict graded qualifications. Getting a certification wrong the first time meant doing it over, which meant burning time the unit didn't have. If the doctrine is deterministic and the coordination is the rate-limiter, why is a person still doing the running-around?",
     goal:"Build a standardized reminder + scheduling system that knew the training doctrine, tracked what certifications were coming due at each unit level, forecasted availability across range control and training-area bookings, and generated the paperwork — all the way through the CONOP approval chain.",
     role:"End-to-end designer and builder. Modeled the doctrine (which certs are due at which level), integrated the forecast of upcoming dates and existing reservations, surfaced the viable training windows, auto-populated required dates and documents once a window was chosen, saved the output to the desktop so the NCO could route it out once the supervisor signed off on the CONOP.",
@@ -512,7 +284,7 @@ const portfolio = [
     skills:["Workflow automation","Calendar + availability conflict resolution","Doctrine / rules-engine modeling","Auto-generated documentation","Approval-workflow integration (CONOP sign-off)","Cross-functional coordination (range control, training areas, command)","Requirements analysis"]},
   {code:"PANTHER", title:"Panther / MMPV Instructor", era:"shipped-army", eraLabel:"Shipped · Army",
     tag:"Certified instructor — 25 lessons across OPNET + FMNET tracks",
-    fit:[3],
+    fit:[],
     why:"A unit that can't operate and maintain its own combat vehicles depends on outside help every time something breaks. Can two parallel cert tracks — one for operators, one for maintainers — build enough internal capability that the unit stands on its own?",
     goal:"Teach both operator (OPNET) and field maintainer (FMNET) certification courses for the Panther mine-protected vehicle so the unit could operate and maintain a combat vehicle fleet self-sufficiently.",
     role:"Certified Army instructor on both tracks, plus the underlying TM 9-2355-314 technical manual series.",
@@ -520,7 +292,7 @@ const portfolio = [
     skills:["Technical instruction","Curriculum development","Translating dense technical docs for different audiences","Cross-track subject-matter depth"]},
   {code:"KOREA-ROK", title:"ROK Army Cross-Training (part 1 of 2)", era:"shipped-army", eraLabel:"Shipped · Army",
     tag:"Mission-prep training — built the ROK team into the US element for the real-world UXO clearance that followed",
-    fit:[3],
+    fit:[],
     why:"The UXO clearance on those two mountains couldn't be done by the US element alone — it needed a trained multinational team with the ROK Army in the loop. But US and ROK forces had different languages, different doctrine, and different assumptions about how the work would be done. The question wasn't whether to train — it was whether structured joint training could close the gaps fast enough that the combined team was actually ready to execute a real-world hazardous mission together. Not theory. Execution.",
     goal:"Design and deliver the joint US-ROK training that would build the combined team into a single operational unit capable of executing the Korea UXO Clearance (see linked project below) as one force, not two forces working next to each other.",
     role:"Training planner and lead instructor. Designed the curriculum so that language, doctrine, and technical differences were resolved before the team ever stepped onto the mountains. Trained with the exact mission in mind — not generic alliance exercises.",
@@ -528,7 +300,7 @@ const portfolio = [
     skills:["Mission-focused curriculum design","Multinational coordination","Stakeholder translation","Cross-doctrine instruction","Field-execution leadership"]},
   {code:"KOREA-UXO", title:"Korea Ordnance Clearance (part 2 of 2)", era:"shipped-army", eraLabel:"Shipped · Army",
     tag:"Commanded a ROK company on one of two mountains · directed search pattern · 200+ UXO recovered",
-    fit:[3],
+    fit:[],
     why:"Two mountains adjacent to the training range were full of unexploded ordnance. That terrain was effectively off-limits until someone cleared it, and clearance is hazardous work — there's no way to do it risk-free. How do you plan and execute a multinational operation on hazardous ground without losing people, and how do you do it with a team that was built for this exact mission?",
     goal:"Execute the UXO clearance of both mountains using the combined US-ROK team that had been trained specifically for this mission (see linked cross-training project above). Restore safe terrain use for the range and eliminate the persistent hazard.",
     role:"On-ground mission commander for one of the two mountains personally. Had a full company of ROK Army (~100+ soldiers) under command on that mountain — directed their search pattern, set the sweep areas, managed the risk posture on hazardous ground, and led execution as a single combined element. Foreign-national command at enlisted level is architect-grade responsibility done at a rank most people never see it at.",
@@ -536,7 +308,7 @@ const portfolio = [
     skills:["Foreign-national command (company-level, as enlisted)","Multinational operations leadership","Hazardous-site planning and execution","Directing search operations on hazardous ground","Risk management under real-world constraints","Delivering a pre-trained team into live operational use","Cross-team coordination"]},
   {code:"VAULT", title:"Second Brain — AI-Integrated Vault", era:"active", eraLabel:"Active",
     tag:"Obsidian + Claude Code + Piper TTS + Gmail automation",
-    fit:[2,3],
+    fit:[],
     why:"Productivity tools don't learn your voice. They don't remember what mattered last week. They sit passive until you do the work. Can a personal vault plus a voice interface plus a coding agent actually function as a second brain — an augmentation layer that gets smarter the more you use it?",
     goal:"Build a personal knowledge-management and automation system integrating Obsidian notes, custom Claude skills, local text-to-speech, and Gmail filter automation.",
     role:"Architect end-to-end — designed the structure, wrote the custom skills, debugged and patched open-source tools, integrated everything.",
@@ -564,7 +336,7 @@ const portfolio = [
 
   {code:"CYBER-ANOM", title:"Cybersec ML Anomaly Dashboard", era:"proposed", eraLabel:"Proposed · Planned",
     tag:"Detect network anomalies in public security logs — cybersec + applied ML + dashboarding",
-    fit:[2],
+    fit:[],
     why:"Most analyst portfolios never touch security logs. Yours comes pre-loaded with a cybersec bootcamp and CompTIA cert stack. Pairing that background with applied ML on real log data opens a lane where few competitors can follow.",
     goal:"Train anomaly-detection models on public network / security log datasets, build a live dashboard that surfaces anomalies with context, ship to a public cloud demo.",
     role:"Planned role: end-to-end — data sourcing, feature engineering, model training, dashboard build, deployment.",
@@ -573,7 +345,7 @@ const portfolio = [
 
   {code:"PHISH-CL", title:"Phishing Classifier + Browser Extension", era:"proposed", eraLabel:"Proposed · Planned",
     tag:"Train a phishing classifier, ship it as a browser extension that flags emails in real time",
-    fit:[2],
+    fit:[],
     why:"Classifier + shipped extension = \"trains AND deploys.\" End-user visible. Most ML projects die in a Jupyter notebook — this one puts your work on real people's screens, which is exactly what hiring managers want to see a Phase 2 engineer do.",
     goal:"Train a classifier on public phishing datasets, build a browser extension (Chrome/Firefox) that runs inference locally or via a small API, flags suspicious emails in real time with an explanation.",
     role:"Planned role: ML + extension developer. Two deliverables — trained model + shipped extension with public install.",
@@ -582,7 +354,7 @@ const portfolio = [
 
   {code:"VA-RAG", title:"Veteran Benefits RAG Agent", era:"proposed", eraLabel:"Proposed · Planned",
     tag:"Conversational RAG over VA documents — help vets find what they qualify for without 50-page PDFs",
-    fit:[2],
+    fit:[],
     why:"You know this pain personally. Vets slog through dense PDFs to figure out what they qualify for. A RAG agent can answer \"am I eligible for X\" in plain language with citations. Personal mission alignment plus the hottest current tech stack equals memorable.",
     goal:"Build a conversational RAG agent that indexes public VA benefits documents, answers eligibility and application questions in plain English with citations, deploy as a free tool.",
     role:"Planned role: full-stack AI engineer — ingestion, chunking, embedding, retrieval, LLM integration, UI.",
@@ -591,7 +363,7 @@ const portfolio = [
 
   {code:"DOC-SEC", title:"Document Security Auditor (LLM Agent)", era:"proposed", eraLabel:"Proposed · Planned",
     tag:"LLM agent that scans docs for PII, security keywords, classification leakage — compliance lane",
-    fit:[3],
+    fit:[],
     why:"LLM + compliance = a lane most analysts can't touch. Your cybersec background makes it credible. Enterprise orgs will pay real money for something that prevents them from leaking classified or personal data in documents — and that need isn't going away.",
     goal:"Build an LLM-powered agent that scans documents (PDFs, Word, text) for PII, security-sensitive keywords, and classification markings; flags findings with confidence and context; outputs an audit report.",
     role:"Planned role: agent architect + compliance designer. Requires balancing precision, recall, and explainability.",
@@ -600,7 +372,7 @@ const portfolio = [
 
   {code:"OSINT-TI", title:"OSINT Threat Intelligence Aggregator", era:"proposed", eraLabel:"Proposed · Planned",
     tag:"Pull + classify threat data from CISA, MITRE, public feeds — alert on relevance",
-    fit:[3],
+    fit:[],
     why:"Cross-cut skill demo: cybersec + ML + pipeline architecture + cloud. Architect-level work because the integration surface is large — multiple data sources, classification layer, alerting logic, storage, UI. Solves a real problem for anyone running a small security team.",
     goal:"Build a pipeline that ingests threat feeds from CISA, MITRE, and public sources; classifies by severity / relevance to a target stack; surfaces actionable alerts through a dashboard or notification channel.",
     role:"Planned role: architect. Data pipeline, classification model, alerting infrastructure, UI — four systems cooperating.",
@@ -609,7 +381,7 @@ const portfolio = [
 
   {code:"MAINT-PRED", title:"Equipment Maintenance Predictor", era:"proposed", eraLabel:"Proposed · Planned",
     tag:"Predict equipment failure from telemetry — civilian ML version of the motorpool redesign",
-    fit:[3],
+    fit:[],
     why:"The civilian continuation of your motorpool work. Same problem, ML toolkit: \"I solved this without ML once. Here's what ML adds.\" Narrative arc recruiters remember — you walked the problem space, now you're showing the modern tool on it.",
     goal:"Train a predictive maintenance model on public industrial telemetry data (bearing, engine, or transformer datasets); ship as a dashboard that shows which assets need attention and why.",
     role:"Planned role: end-to-end — data sourcing, feature engineering, model training, dashboard, deployment.",
@@ -618,7 +390,7 @@ const portfolio = [
 
   {code:"CLOUD-COST", title:"Multi-Cloud Cost Optimizer", era:"proposed", eraLabel:"Proposed · Planned",
     tag:"Analyze + optimize cloud spend across AWS / Azure / GCP — architect skill demonstrated",
-    fit:[3],
+    fit:[],
     why:"Cost/performance tradeoffs are the core architect skill (see Phase 3 skill list). Multi-cloud fluency is a premium hiring signal. Most engineers show depth in one cloud — this project shows you can reason across three. Directly in the architect lane.",
     goal:"Build a tool that ingests cost and usage data from AWS, Azure, and GCP; identifies waste, rightsizing opportunities, and cross-cloud migration candidates; recommends optimizations with estimated savings.",
     role:"Planned role: architect + analyst. Touches billing APIs on three clouds, cost-model logic, recommendation engine, dashboard.",
@@ -627,7 +399,5 @@ const portfolio = [
 ];
 
 const phaseFitLabels = {
-  1: "Data Analyst",
-  2: "AI Engineer",
-  3: "AI Architect"
+  1: "Data Analyst"
 };

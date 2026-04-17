@@ -566,8 +566,6 @@ body {
 <div class="phase-toggle" id="phaseToggle">
   <button class="phase-btn phase-overview" data-phase="0"><span class="phase-num">◎</span>Overview</button>
   <button class="phase-btn active current" data-phase="1"><span class="phase-num">1</span>Data Analyst</button>
-  <button class="phase-btn" data-phase="2"><span class="phase-num">2</span>AI / ML Engineer</button>
-  <button class="phase-btn" data-phase="3"><span class="phase-num">3</span>AI Architect</button>
 </div>
 
 <div id="phase1-content">
@@ -635,8 +633,8 @@ body {
 </div><!-- end phase1-content -->
 
 <div class="roadmap" id="phase0-content"></div>
-<div class="roadmap" id="phase2-content"></div>
-<div class="roadmap" id="phase3-content"></div>
+
+
 
 <!-- Side panel for course detail -->
 <div class="backdrop" id="backdrop"></div>
@@ -689,7 +687,8 @@ const timeline = done.map(c => ({x:c.date, y:(cum+=c.cu)}));
 const DEGREE_CU = 120;
 
 // Forecast calculation: linear velocity from first to last completed
-const firstDate = new Date(timeline[0].x);
+const hasHistory = timeline.length >= 2;
+const firstDate = hasHistory ? new Date(timeline[0].x) : new Date();
 const lastDate = new Date(timeline[timeline.length-1].x);
 const firstCU = timeline[0].y;
 const lastCU = timeline[timeline.length-1].y;
@@ -703,10 +702,11 @@ const forecastLabel = forecastDate.toLocaleString('en-US', {month:'long', year:'
 const monthsToFinish = Math.round(daysToFinish / 30.4);
 
 // Build forecast dataset: starts from last actual point, extends to 120 CU
-const forecastPoints = [
+// (public demo: if no completed courses, forecast is hidden)
+const forecastPoints = hasHistory ? [
   {x: lastDate.toISOString().slice(0,10), y: lastCU},
   {x: forecastStr, y: DEGREE_CU}
-];
+] : [];
 
 let chartMode = 'actual';
 let lineChart;
@@ -750,7 +750,7 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
     document.querySelectorAll('.toggle-btn').forEach(b => b.classList.toggle('active', b === btn));
     buildChart(mode);
     if (mode === 'forecast') {
-      forecastNote.innerHTML = `At current pace (~${(cuPerDay*30.4).toFixed(1)} CU/month), projected degree completion: <b>${forecastLabel}</b> · ~${monthsToFinish} months from last completed course.`;
+      forecastNote.innerHTML = hasHistory ? `At current pace (~${(cuPerDay*30.4).toFixed(1)} CU/month), projected degree completion: <b>${forecastLabel}</b> · ~${monthsToFinish} months from last completed course.` : `Complete a few courses to unlock a forecast.`;
       forecastNote.style.display = 'block';
     } else {
       forecastNote.style.display = 'none';
@@ -1024,9 +1024,9 @@ function renderOverview() {
   const totalMilestones = 5 + careerPhases[2].milestones.length + careerPhases[3].milestones.length;
   container.innerHTML = `
     <div class="roadmap-hero" style="background:linear-gradient(135deg, rgba(167,139,250,0.1), rgba(34,211,238,0.06));">
-      <h2>The Career Arc · Army NCO → AI Architect</h2>
+      <h2>WGU Bachelor of Science · Data Analytics</h2>
       <p>Three phases, roughly six years, built on the "wizard" reputation already earned in the Army. Phase 1 is happening now at WGU. The destination is the point where people bring AI problems to you first.</p>
-      <div class="timeline">2026 Data Analyst (current) → ~2032 AI Architect (destination)</div>
+      <div class="timeline">WGU Bachelor of Science · Data Analytics · 120 CU required</div>
     </div>
 
     <div class="arc-timeline">
@@ -1043,137 +1043,26 @@ function renderOverview() {
 
     <div class="arc-stats">
       <div class="arc-stat">
-        <div class="arc-stat-num">3</div>
-        <div class="arc-stat-label">Career Phases</div>
+        <div class="arc-stat-num">43</div>
+        <div class="arc-stat-label">Courses</div>
       </div>
       <div class="arc-stat">
-        <div class="arc-stat-num">~${totalSkills}</div>
-        <div class="arc-stat-label">Skills to Master</div>
+        <div class="arc-stat-num">${DEGREE_MIN_CU}</div>
+        <div class="arc-stat-label">CU to Graduate</div>
       </div>
       <div class="arc-stat">
-        <div class="arc-stat-num">${totalCerts}</div>
+        <div class="arc-stat-num">4</div>
         <div class="arc-stat-label">Industry Certs</div>
       </div>
       <div class="arc-stat">
-        <div class="arc-stat-num">${totalMilestones}</div>
-        <div class="arc-stat-label">Milestones</div>
+        <div class="arc-stat-num">6</div>
+        <div class="arc-stat-label">Terms (plan)</div>
       </div>
     </div>
 
-    <div class="phase-cards">
-      <div class="phase-card current" data-jump="1">
-        <div class="phase-card-num">Phase 1 · You Are Here</div>
-        <div class="phase-card-title">Data Analyst</div>
-        <div class="phase-card-timeline">Now → ~2027 · Overlaps BS / MS start</div>
-        <ul class="phase-card-list">
-          <li>BS Data Analytics at WGU (42/120 CU, 35% done)</li>
-          <li>Earns: AWS CCP · CompTIA Data+ · Project+ · Udacity Nanodegree</li>
-          <li>First paid role as analyst — portfolio of 2–3 shipped projects</li>
-          <li>Python, SQL, Tableau, git — solid day-to-day</li>
-        </ul>
-      </div>
-      <div class="phase-card" data-jump="2">
-        <div class="phase-card-num">Phase 2</div>
-        <div class="phase-card-title">AI / ML Engineer</div>
-        <div class="phase-card-timeline">~2027 → 2030 · Overlaps MS</div>
-        <ul class="phase-card-list">
-          <li>MS in AI — completed or far enough in</li>
-          <li>13 new skills: PyTorch, LLMs, MLOps, Docker, vector DBs</li>
-          <li>Ship one end-to-end ML system in production</li>
-          <li>Title shift: Analyst → Engineer</li>
-        </ul>
-      </div>
-      <div class="phase-card" data-jump="3">
-        <div class="phase-card-num">Phase 3 · Destination</div>
-        <div class="phase-card-title">AI Architect</div>
-        <div class="phase-card-timeline">~2030 → 2032+ · Wizard lives here</div>
-        <ul class="phase-card-list">
-          <li>Senior → Principal → Architect scope</li>
-          <li>3 more certs: AWS SAA · AWS GenAI · Azure AI Engineer</li>
-          <li>Own one AI system end-to-end in production</li>
-          <li>Public talk or blog series — external reputation</li>
-        </ul>
-      </div>
-    </div>
+    
 
-    <div class="card">
-      <div class="roadmap-section">
-        <div class="roadmap-section-title">Portfolio · Built Evidence</div>
-        <p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Real shipped work across three eras: active WGU portfolio pieces, Army systems-integration and leadership track, and the infrastructure that runs this dashboard.</p>
-        <div class="portfolio-grid" id="portfolio-grid"></div>
-        <div class="portfolio-cta">
-          <div class="portfolio-cta-text">More active and planned projects live in the vault under <b>01-projects/</b>.</div>
-          <a href="https://github.com/dT-Tb-cmd" target="_blank" rel="noopener noreferrer">GitHub Profile ↗</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="roadmap-section">
-        <div class="roadmap-section-title">The Through-Line</div>
-        <p style="font-size:14px; color:#cbd5e1; line-height:1.7;">
-          Army taught you to take an inefficient system, redesign it so it works, document the change, and ship the result. Boomerang + CROW was textbook systems integration. Motorpool redesign was process engineering. The ROK cross-training was stakeholder translation. <b style="color:#22d3ee;">Those are the same skills architects get paid for.</b>
-        </p>
-        <p style="font-size:14px; color:#cbd5e1; line-height:1.7; margin-top:12px;">
-          The technical half (PyTorch, LLMs, ML system design) is what Phase 2 and 3 build. The leadership and systems-thinking half is already in place. The "wizard" reputation was earned once in the Army — doing it again in a new domain is a shorter climb than it looks.
-        </p>
-      </div>
-    </div>
-
-    <div class="card" style="background:linear-gradient(135deg, rgba(34,211,238,0.06), rgba(139,92,246,0.06)); border-color:rgba(34,211,238,0.25);">
-      <div class="roadmap-section" style="margin-bottom:0;">
-        <div class="roadmap-section-title">Destination</div>
-        <p style="color:#cbd5e1; font-size:14px; line-height:1.7; font-style:italic;">
-          People in your org and outside it bring AI problems to you first. The wizard reputation, transferred from the Army context to the AI one. The title catches up to the role you're already playing.
-        </p>
-      </div>
-    </div>
-  `;
-  container.querySelectorAll('[data-jump]').forEach(card => {
-    card.addEventListener('click', () => {
-      const phase = card.dataset.jump;
-      document.querySelector(`.phase-btn[data-phase="${phase}"]`).click();
-    });
-  });
-
-  // Render portfolio grid
-  const pGrid = container.querySelector('#portfolio-grid');
-  portfolio.forEach((p, idx) => {
-    const card = document.createElement('div');
-    card.className = 'portfolio-card ' + p.era;
-    const fitBadges = (p.fit || []).map(f => `<span class="fit-badge fit-${f}">${phaseFitLabels[f]}</span>`).join('');
-    card.innerHTML = `
-      <div class="portfolio-era ${p.era}">${p.eraLabel}</div>
-      <div class="portfolio-title">${p.title}</div>
-      <div class="portfolio-tag">${p.tag}</div>
-      ${p.url ? `<div class="portfolio-link">View repo ↗</div>` : ''}
-      ${fitBadges ? `<div class="fit-row"><span class="fit-label">Best fit:</span>${fitBadges}</div>` : ''}
-    `;
-    card.addEventListener('click', () => openPortfolioPanel(p));
-    pGrid.appendChild(card);
-  });
-
-  container.dataset.rendered = "1";
-}
-
-function renderRoadmap(phaseNum) {
-  const p = careerPhases[phaseNum];
-  const container = document.getElementById(`phase${phaseNum}-content`);
-  if (container.dataset.rendered) return;
-  const safe = s => s.replace(/"/g, '&quot;');
-  const skillChip = s => `<div class="skill-card ${s.status}" data-kind="skill" data-name="${safe(s.name)}" data-status="${s.status}"><div>${s.name}</div><div class="skill-status">${s.status === 'go' ? '✓ GO' : s.status === 'in_prog' ? '● IN PROGRESS' : '○ NOT STARTED'}</div></div>`;
-  container.innerHTML = `
-    <div class="roadmap-hero">
-      <h2>Phase ${p.num} · ${p.title}</h2>
-      <p>${p.subtitle}</p>
-      <div class="timeline">Target timeline: ${p.timeline}</div>
-    </div>
-    <div class="card">
-      <div class="roadmap-section">
-        <div class="roadmap-section-title">Target Job Titles</div>
-        <div class="job-title-list">${p.jobTitles.map(j => `<span class="job-title" data-kind="job" data-name="${safe(j)}">${j}</span>`).join('')}</div>
-      </div>
-    </div>
+    
     ${p.alreadyHave.length ? `<div class="card"><div class="roadmap-section">
       <div class="roadmap-section-title">Already Have (carries forward)</div>
       <ul style="padding-left:18px; margin:0; font-size:13px; color:#cbd5e1; line-height:1.8;">
@@ -1253,11 +1142,9 @@ document.querySelectorAll('.phase-btn').forEach(btn => {
     if (phase === '0') renderOverview();
     else if (phase !== '1') renderRoadmap(phase);
     const titleMap = {
-      '0': ['The Career Arc', 'Army NCO → Data Analyst → AI Engineer → AI Architect'],
+      '0': ['The Career Arc', 'Interactive degree progress dashboard'],
       '1': ['Degree Progress Dashboard', 'BS Data Analytics · Western Governors University'],
-      '2': ['Career Roadmap · Phase 2', 'AI / ML Engineer — middle phase'],
-      '3': ['Career Roadmap · Phase 3', 'AI Architect — destination role']
-    };
+      };
     document.getElementById('dashTitle').textContent = titleMap[phase][0];
     document.getElementById('dashSub').textContent = titleMap[phase][1];
   });
