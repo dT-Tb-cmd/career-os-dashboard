@@ -1,0 +1,17 @@
+# Private data — never commit
+data-private.*
+*.local.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Python build cache
+__pycache__/
+*.pyc

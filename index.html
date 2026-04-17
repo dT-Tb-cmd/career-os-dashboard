@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Design 4 — Dark Analyst (Hybrid of 1 + 2)</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, "Segoe UI", Inter, system-ui, sans-serif;
+  background: #0a0f1c;
+  color: #e2e8f0;
+  min-height: 100vh;
+  padding: 32px;
+}
+.page { max-width: 1280px; margin: 0 auto; }
+
+/* Header — clean structure from Design 1, dark palette from Design 2 */
+.header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 20px; padding-bottom: 20px;
+  border-bottom: 1px solid rgba(34,211,238,0.2);
+}
+
+/* Career phase toggle row — sits under header */
+.phase-toggle {
+  display: flex; gap: 10px; margin-bottom: 28px;
+  padding: 4px; background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  width: fit-content;
+}
+.phase-btn {
+  padding: 10px 20px; border-radius: 10px; border: none;
+  background: transparent; color: #94a3b8;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  font-family: inherit; transition: all 0.2s;
+  display: flex; align-items: center; gap: 8px;
+}
+.phase-btn:hover { color: #e2e8f0; }
+.phase-btn.active {
+  background: linear-gradient(135deg, rgba(34,211,238,0.15), rgba(139,92,246,0.15));
+  color: #22d3ee;
+  box-shadow: 0 0 16px rgba(34,211,238,0.2);
+  border: 1px solid rgba(34,211,238,0.3);
+}
+.phase-btn .phase-num {
+  display: inline-block; width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); color: #64748b;
+  font-size: 10px; line-height: 20px; text-align: center; font-weight: 700;
+}
+.phase-btn.active .phase-num { background: #22d3ee; color: #0a0f1c; }
+.phase-btn.current::after {
+  content: "YOU ARE HERE"; font-size: 8px; color: #fbbf24;
+  background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3);
+  padding: 2px 6px; border-radius: 4px; margin-left: 6px;
+  letter-spacing: 0.08em;
+}
+.phase-btn.phase-overview .phase-num {
+  background: rgba(167,139,250,0.2); color: #a78bfa; font-size: 13px;
+}
+.phase-btn.phase-overview.active {
+  background: linear-gradient(135deg, rgba(167,139,250,0.2), rgba(34,211,238,0.1));
+  color: #a78bfa;
+  border: 1px solid rgba(167,139,250,0.4);
+  box-shadow: 0 0 16px rgba(167,139,250,0.2);
+}
+.phase-btn.phase-overview.active .phase-num { background: #a78bfa; color: #0a0f1c; }
+
+/* Overview-specific */
+.arc-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px;
+}
+.arc-stat {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 20px; text-align: center;
+}
+.arc-stat-num {
+  font-size: 36px; font-weight: 700; line-height: 1;
+  background: linear-gradient(135deg, #22d3ee, #a78bfa);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.arc-stat-label {
+  font-size: 10px; color: #94a3b8; text-transform: uppercase;
+  letter-spacing: 0.15em; margin-top: 8px;
+}
+.phase-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+.phase-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 20px;
+  cursor: pointer; transition: all 0.2s; position: relative;
+}
+.phase-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(34,211,238,0.4);
+  box-shadow: 0 8px 24px rgba(34,211,238,0.1);
+}
+.phase-card.current {
+  border-color: rgba(251,191,36,0.4);
+  background: rgba(251,191,36,0.04);
+}
+.phase-card-num {
+  font-size: 10px; color: #22d3ee; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+}
+.phase-card.current .phase-card-num { color: #fbbf24; }
+.phase-card-title {
+  font-size: 20px; font-weight: 700; margin: 6px 0 4px;
+  background: linear-gradient(135deg, #22d3ee, #a78bfa);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.phase-card-timeline { font-size: 11px; color: #94a3b8; margin-bottom: 14px; }
+.phase-card-list { font-size: 12px; color: #cbd5e1; line-height: 1.7; }
+.phase-card-list li { margin-bottom: 4px; list-style: none; padding-left: 14px; position: relative; }
+.phase-card-list li::before { content: "▸"; position: absolute; left: 0; color: #22d3ee; }
+.phase-arrow {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; color: #22d3ee;
+}
+.arc-timeline {
+  position: relative; padding: 24px 0 8px;
+  background: linear-gradient(90deg, rgba(34,211,238,0.08), rgba(167,139,250,0.08));
+  border: 1px solid rgba(34,211,238,0.2);
+  border-radius: 12px; margin-bottom: 20px;
+}
+.arc-timeline-track {
+  height: 4px; background: rgba(255,255,255,0.08);
+  border-radius: 999px; margin: 0 40px; position: relative;
+}
+.arc-timeline-fill {
+  position: absolute; top: 0; left: 0; height: 100%;
+  width: 14%; background: linear-gradient(90deg, #22d3ee, #a78bfa);
+  border-radius: 999px; box-shadow: 0 0 16px rgba(34,211,238,0.5);
+}
+.arc-marker {
+  position: absolute; top: 50%; transform: translate(-50%, -50%);
+  width: 14px; height: 14px; background: #22d3ee; border-radius: 50%;
+  border: 3px solid #0a0f1c;
+  box-shadow: 0 0 12px rgba(34,211,238,0.8);
+}
+.arc-labels {
+  display: flex; justify-content: space-between; margin: 14px 40px 0;
+  font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.1em;
+}
+
+/* Portfolio grid */
+.portfolio-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px;
+}
+.portfolio-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 16px;
+  cursor: pointer; transition: all 0.2s;
+  position: relative; overflow: hidden;
+}
+.portfolio-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(34,211,238,0.4);
+  box-shadow: 0 8px 24px rgba(34,211,238,0.12);
+}
+.portfolio-card.shipped { border-left: 3px solid #34d399; }
+.portfolio-card.active { border-left: 3px solid #fbbf24; background: rgba(251,191,36,0.04); }
+.portfolio-card.shipped-army { border-left: 3px solid #a78bfa; background: rgba(167,139,250,0.04); }
+.portfolio-card.proposed {
+  border-left: 3px solid #22d3ee;
+  background: rgba(34,211,238,0.03);
+  border-style: dashed;
+  border-top-style: solid; border-right-style: solid; border-bottom-style: solid;
+  opacity: 0.92;
+}
+.portfolio-era {
+  display: inline-block; font-size: 9px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 999px; margin-bottom: 8px;
+}
+.portfolio-era.active { background: rgba(251,191,36,0.15); color: #fbbf24; }
+.portfolio-era.shipped { background: rgba(16,185,129,0.15); color: #34d399; }
+.portfolio-era.shipped-army { background: rgba(167,139,250,0.15); color: #a78bfa; }
+.portfolio-era.proposed { background: rgba(34,211,238,0.15); color: #22d3ee; }
+.portfolio-title { font-size: 14px; color: #e2e8f0; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+.portfolio-tag { font-size: 11px; color: #94a3b8; line-height: 1.5; }
+.portfolio-link {
+  font-size: 10px; color: #22d3ee; margin-top: 8px;
+  display: flex; align-items: center; gap: 4px;
+}
+.fit-row {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px;
+  padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06);
+}
+.fit-badge {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 3px 8px; border-radius: 4px;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.fit-badge.fit-1 { background: rgba(34,211,238,0.12); color: #22d3ee; border: 1px solid rgba(34,211,238,0.3); }
+.fit-badge.fit-2 { background: rgba(167,139,250,0.12); color: #a78bfa; border: 1px solid rgba(167,139,250,0.3); }
+.fit-badge.fit-3 { background: rgba(236,72,153,0.12); color: #f472b6; border: 1px solid rgba(236,72,153,0.3); }
+.fit-label { font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; margin-right: 4px; align-self: center; }
+.portfolio-cta {
+  background: linear-gradient(135deg, rgba(34,211,238,0.08), rgba(139,92,246,0.08));
+  border: 1px solid rgba(34,211,238,0.25);
+  border-radius: 10px; padding: 16px 20px; margin-top: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.portfolio-cta-text { font-size: 13px; color: #cbd5e1; }
+.portfolio-cta-text b { color: #22d3ee; font-weight: 600; }
+.portfolio-cta a {
+  padding: 8px 16px; background: rgba(34,211,238,0.15);
+  border: 1px solid rgba(34,211,238,0.4); border-radius: 8px;
+  color: #22d3ee; text-decoration: none; font-size: 12px;
+  font-weight: 600; transition: all 0.15s;
+}
+.portfolio-cta a:hover { background: rgba(34,211,238,0.25); }
+
+/* Phase 2 / 3 roadmap view */
+.roadmap { display: none; }
+.roadmap.active { display: block; }
+.roadmap-hero {
+  background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(34,211,238,0.04));
+  border: 1px solid rgba(139,92,246,0.25);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 20px;
+}
+.roadmap-hero h2 {
+  font-size: 24px; font-weight: 700; margin-bottom: 6px;
+  background: linear-gradient(135deg, #a78bfa, #22d3ee);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.roadmap-hero p { color: #cbd5e1; font-size: 14px; line-height: 1.6; }
+.roadmap-hero .timeline {
+  display: inline-block; margin-top: 12px;
+  padding: 4px 12px; background: rgba(34,211,238,0.1);
+  border: 1px solid rgba(34,211,238,0.3); border-radius: 999px;
+  font-size: 11px; color: #22d3ee; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+.roadmap-section { margin-bottom: 20px; }
+.roadmap-section-title {
+  font-size: 11px; font-weight: 600; color: #22d3ee;
+  text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.roadmap-section-title::before { content: "▸"; }
+.skill-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px;
+}
+.skill-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-left: 3px solid #475569;
+  border-radius: 8px; padding: 14px;
+  font-size: 13px; color: #e2e8f0;
+  cursor: pointer; transition: all 0.15s; position: relative;
+}
+.skill-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(34,211,238,0.4);
+  box-shadow: 0 4px 16px rgba(34,211,238,0.12);
+}
+.skill-card::after {
+  content: "▸"; position: absolute; top: 14px; right: 14px;
+  color: rgba(255,255,255,0.2); font-size: 11px;
+  transition: color 0.15s;
+}
+.skill-card:hover::after { color: #22d3ee; }
+.job-title, .milestone {
+  cursor: pointer; transition: all 0.15s;
+}
+.job-title:hover {
+  background: rgba(34,211,238,0.1);
+  border-color: rgba(34,211,238,0.3);
+  color: #22d3ee;
+}
+.milestone:hover {
+  background: rgba(255,255,255,0.04);
+  border-color: rgba(34,211,238,0.25);
+}
+.skill-card.go { border-left-color: #34d399; background: rgba(16,185,129,0.04); }
+.skill-card.in_prog { border-left-color: #fbbf24; background: rgba(251,191,36,0.04); }
+.skill-card.no_go { border-left-color: #64748b; opacity: 0.8; }
+.skill-status {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-top: 4px;
+}
+.skill-card.go .skill-status { color: #34d399; }
+.skill-card.in_prog .skill-status { color: #fbbf24; }
+.skill-card.no_go .skill-status { color: #94a3b8; }
+.job-title-list, .milestone-list {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.job-title {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  color: #cbd5e1; padding: 6px 12px; border-radius: 999px; font-size: 12px;
+}
+.milestone {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px; background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px; font-size: 13px; color: #cbd5e1;
+  width: 100%;
+}
+.milestone.done {
+  background: rgba(16,185,129,0.06);
+  border-color: rgba(16,185,129,0.25);
+}
+.milestone.done .milestone-text {
+  color: #64748b; text-decoration: line-through;
+}
+.milestone-check {
+  width: 18px; height: 18px; border: 1.5px solid #64748b; border-radius: 4px;
+  flex-shrink: 0; margin-top: 1px;
+  cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: transparent; font-weight: 700;
+}
+.milestone-check:hover {
+  border-color: #22d3ee;
+  background: rgba(34,211,238,0.1);
+}
+.milestone-check.checked {
+  background: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+}
+.milestone-check.checked::before { content: "✓"; }
+.milestone-text { flex: 1; }
+.milestone-list { flex-direction: column; }
+.cert-target {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 14px; background: rgba(251,191,36,0.05);
+  border: 1px solid rgba(251,191,36,0.3);
+  border-radius: 8px; margin-right: 8px; margin-bottom: 8px;
+  font-size: 13px; color: #fbbf24; font-weight: 500;
+}
+.title h1 {
+  font-size: 24px; font-weight: 600;
+  background: linear-gradient(135deg, #f0f9ff, #67e8f9);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.title p { font-size: 13px; color: #64748b; margin-top: 4px; }
+.meta { font-size: 12px; color: #64748b; text-align: right; line-height: 1.8; }
+.meta b { color: #22d3ee; font-weight: 600; }
+
+/* Hero row — Design 1 layout, Design 2 glow */
+.grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 20px;
+}
+.card.accent {
+  background: linear-gradient(135deg, rgba(34,211,238,0.06), rgba(139,92,246,0.06));
+  border: 1px solid rgba(34,211,238,0.25);
+}
+.card-title {
+  font-size: 11px; font-weight: 600; color: #22d3ee;
+  text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-title .label-wrap { display: flex; align-items: center; gap: 8px; flex: 1; }
+.card-title .label-wrap::before { content: "▸"; }
+
+/* Inline toggle for chart panels */
+.toggle-group {
+  display: inline-flex; gap: 2px;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 999px; padding: 2px;
+}
+.toggle-btn {
+  padding: 5px 12px; border-radius: 999px; border: none; background: transparent;
+  color: #94a3b8; font-size: 10px; font-weight: 600; cursor: pointer;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  transition: all 0.15s; font-family: inherit;
+}
+.toggle-btn.active {
+  background: rgba(34,211,238,0.15); color: #22d3ee;
+  box-shadow: 0 0 12px rgba(34,211,238,0.2);
+}
+.forecast-note {
+  font-size: 11px; color: #a78bfa; margin-top: 8px; text-align: right;
+  font-style: italic;
+}
+.forecast-note b { color: #22d3ee; font-style: normal; font-weight: 600; }
+
+/* Progress ring — big, central, glowing (from D2) */
+.ring-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.ring-container { position: relative; width: 200px; height: 200px; filter: drop-shadow(0 0 16px rgba(34,211,238,0.3)); }
+.ring-center {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.ring-big {
+  font-size: 48px; font-weight: 700; line-height: 1;
+  background: linear-gradient(135deg, #22d3ee, #a78bfa);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.ring-label { font-size: 11px; color: #94a3b8; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.1em; }
+
+.kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+.kpi {
+  text-align: center; padding: 12px; background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 8px;
+}
+.kpi-num { font-size: 22px; font-weight: 700; color: #22d3ee; }
+.kpi-num.amber { color: #fbbf24; }
+.kpi-sub { font-size: 10px; color: #94a3b8; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.1em; }
+
+/* XP bar under the chart (from D2) */
+.xp-bar { margin-top: 16px; }
+.xp-bar-track {
+  height: 8px; background: rgba(34,211,238,0.1); border-radius: 999px; overflow: hidden;
+  border: 1px solid rgba(34,211,238,0.2);
+}
+.xp-bar-fill {
+  height: 100%; width: 40%;
+  background: linear-gradient(90deg, #22d3ee, #a78bfa);
+  box-shadow: 0 0 16px rgba(34,211,238,0.4);
+  border-radius: 999px;
+}
+.xp-bar-labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; }
+
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+.chart-wrap { height: 240px; position: relative; }
+
+/* Course cards — D2 style quest cards but cleaner */
+.course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+.quest {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 14px;
+  transition: all 0.15s;
+  cursor: pointer;
+  position: relative;
+}
+.quest:hover {
+  transform: translateY(-2px);
+  border-color: rgba(34,211,238,0.5);
+  box-shadow: 0 4px 20px rgba(34,211,238,0.15);
+}
+.quest::after {
+  content: "▸"; position: absolute; top: 14px; right: 14px;
+  color: rgba(255,255,255,0.2); font-size: 12px;
+  transition: color 0.15s, transform 0.15s;
+}
+.quest:hover::after { color: #22d3ee; transform: translateX(2px); }
+
+/* Side panel */
+.backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  opacity: 0; pointer-events: none; transition: opacity 0.2s;
+  z-index: 10;
+}
+.backdrop.open { opacity: 1; pointer-events: auto; }
+.panel {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: 480px; max-width: 90vw;
+  background: #0a0f1c;
+  border-left: 1px solid rgba(34,211,238,0.3);
+  box-shadow: -8px 0 40px rgba(0,0,0,0.5);
+  transform: translateX(100%);
+  transition: transform 0.25s;
+  z-index: 20;
+  overflow-y: auto;
+  padding: 28px;
+}
+.panel.open { transform: translateX(0); }
+.panel-close {
+  position: absolute; top: 20px; right: 20px;
+  width: 32px; height: 32px; border-radius: 6px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  color: #94a3b8; cursor: pointer; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+}
+.panel-close:hover { background: rgba(255,255,255,0.1); color: #e2e8f0; }
+.panel-code {
+  font-family: "JetBrains Mono", monospace; font-size: 12px;
+  color: #22d3ee; letter-spacing: 0.1em; margin-bottom: 8px;
+}
+.panel-title { font-size: 20px; font-weight: 600; color: #f0f9ff; margin-bottom: 6px; line-height: 1.3; }
+.panel-subtitle { font-size: 13px; color: #94a3b8; margin-bottom: 20px; }
+.panel-section { margin-top: 24px; }
+.panel-section-title {
+  font-size: 11px; color: #22d3ee; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px;
+}
+.panel-badge {
+  display: inline-block; padding: 4px 12px; border-radius: 999px;
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em;
+  margin-right: 6px;
+}
+.panel-badge.oa { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.3); }
+.panel-badge.pa { background: rgba(34,211,238,0.15); color: #22d3ee; border: 1px solid rgba(34,211,238,0.3); }
+.panel-badge.passed { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+.panel-badge.active { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.panel-badge.queued { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.3); }
+.task-item {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px; padding: 14px; margin-bottom: 10px;
+}
+.task-item.done { border-left: 3px solid #34d399; }
+.task-item.pending { border-left: 3px solid #fbbf24; }
+.task-item.queued { border-left: 3px solid #475569; }
+.task-name { font-size: 13px; color: #e2e8f0; font-weight: 600; margin-bottom: 4px; }
+.task-status { font-size: 11px; color: #94a3b8; }
+.task-notes { font-size: 11px; color: #64748b; margin-top: 6px; font-style: italic; }
+.topic-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.topic {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 6px; padding: 6px 10px; font-size: 11px; color: #cbd5e1;
+}
+.quest.completed { border-left: 3px solid #34d399; }
+.quest.in_progress { border-left: 3px solid #fbbf24; background: rgba(251,191,36,0.04); }
+.quest.not_started { border-left: 3px solid #475569; opacity: 0.7; }
+.quest-code {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  font-family: "JetBrains Mono", monospace;
+  margin-bottom: 4px;
+}
+.quest.completed .quest-code { color: #34d399; }
+.quest.in_progress .quest-code { color: #fbbf24; }
+.quest.not_started .quest-code { color: #64748b; }
+.quest-name { font-size: 12px; color: #e2e8f0; margin-bottom: 10px; line-height: 1.4; }
+.quest-meta { display: flex; justify-content: space-between; font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; }
+.quest-status { font-weight: 600; }
+.quest.completed .quest-status { color: #34d399; }
+.quest.in_progress .quest-status { color: #fbbf24; }
+
+/* Filter chips */
+.filters { display: flex; gap: 8px; margin-bottom: 16px; }
+.chip {
+  padding: 6px 14px; border-radius: 999px; font-size: 11px; font-weight: 600;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  color: #94a3b8; cursor: pointer; transition: all 0.15s;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.chip.active { background: rgba(34,211,238,0.15); border-color: #22d3ee; color: #22d3ee; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="header">
+  <div class="title">
+    <h1 id="dashTitle">Degree Progress Dashboard</h1>
+    <p id="dashSub">BS Data Analytics · Western Governors University</p>
+  </div>
+  <div class="meta">
+    <div>STUDENT: <b>Demo Student</b></div>
+    <div>TERM: <b>Term 3 · Mar–Aug 2026</b></div>
+    <div>SYNCED: <b>Live Demo</b></div>
+  </div>
+</div>
+
+<div class="phase-toggle" id="phaseToggle">
+  <button class="phase-btn phase-overview" data-phase="0"><span class="phase-num">◎</span>Overview</button>
+  <button class="phase-btn active current" data-phase="1"><span class="phase-num">1</span>Data Analyst</button>
+  <button class="phase-btn" data-phase="2"><span class="phase-num">2</span>AI / ML Engineer</button>
+  <button class="phase-btn" data-phase="3"><span class="phase-num">3</span>AI Architect</button>
+</div>
+
+<div id="phase1-content">
+
+<div class="grid">
+  <div class="card accent">
+    <div class="card-title">Degree Completion</div>
+    <div class="ring-wrap">
+      <div class="ring-container">
+        <canvas id="ring"></canvas>
+        <div class="ring-center">
+          <div class="ring-big" id="ringPct">—</div>
+          <div class="ring-label" id="ringLabel">—</div>
+        </div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-num" id="kpiCompleted">—</div><div class="kpi-sub">Completed</div></div>
+        <div class="kpi"><div class="kpi-num amber" id="kpiActive">—</div><div class="kpi-sub">In Progress</div></div>
+      </div>
+      <div class="xp-bar" style="width:100%;">
+        <div class="xp-bar-track"><div class="xp-bar-fill" id="xpFill"></div></div>
+        <div class="xp-bar-labels"><span>0 CU</span><span id="xpMid">On Track</span><span id="xpEnd">120 CU</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">CUs Earned by Term</div>
+    <div class="chart-wrap"><canvas id="termChart"></canvas></div>
+  </div>
+</div>
+
+<div class="charts-grid">
+  <div class="card">
+    <div class="card-title">CUs by Category</div>
+    <div class="chart-wrap"><canvas id="catChart"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-title">
+      <span class="label-wrap">Completion Velocity</span>
+      <div class="toggle-group">
+        <button class="toggle-btn active" data-mode="actual">Actual</button>
+        <button class="toggle-btn" data-mode="forecast">Forecast</button>
+      </div>
+    </div>
+    <div class="chart-wrap"><canvas id="lineChart"></canvas></div>
+    <div class="forecast-note" id="forecastNote" style="display:none;"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">Course Catalog</div>
+  <div class="filters" id="filters">
+    <div class="chip active" data-filter="all">All · <span class="count-all"></span></div>
+    <div class="chip" data-filter="completed">Completed · <span class="count-completed"></span></div>
+    <div class="chip" data-filter="in_progress">In Progress · <span class="count-in_progress"></span></div>
+    <div class="chip" data-filter="not_started">Upcoming · <span class="count-not_started"></span></div>
+    <div class="chip" data-filter="cert">★ Certifications · <span class="count-cert"></span></div>
+  </div>
+  <div class="course-grid" id="questList"></div>
+</div>
+
+</div>
+
+</div><!-- end phase1-content -->
+
+<div class="roadmap" id="phase0-content"></div>
+<div class="roadmap" id="phase2-content"></div>
+<div class="roadmap" id="phase3-content"></div>
+
+<!-- Side panel for course detail -->
+<div class="backdrop" id="backdrop"></div>
+<div class="panel" id="panel">
+  <button class="panel-close" id="panelClose">✕</button>
+  <div id="panelContent"></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+
+const earnedCU = courses.filter(c => c.status === 'completed').reduce((s,c) => s+c.cu, 0);
+const totalCU = courses.reduce((s,c) => s+c.cu, 0);
+const pctDegree = Math.round((earnedCU / DEGREE_MIN_CU) * 100);
+document.getElementById('ringPct').textContent = pctDegree + '%';
+document.getElementById('ringLabel').textContent = earnedCU + ' of ' + DEGREE_MIN_CU + ' CU';
+document.getElementById('kpiCompleted').textContent = courses.filter(c => c.status === 'completed').length;
+document.getElementById('kpiActive').textContent = courses.filter(c => c.status === 'in_progress').length;
+document.getElementById('xpFill').style.width = pctDegree + '%';
+document.getElementById('xpEnd').textContent = DEGREE_MIN_CU + ' CU';
+
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.font.family = 'Inter, system-ui, sans-serif';
+
+new Chart(document.getElementById('ring'), {
+  type:'doughnut',
+  data:{datasets:[{data:[earnedCU, Math.max(0, DEGREE_MIN_CU - earnedCU)], backgroundColor:['#22d3ee','rgba(255,255,255,0.06)'], borderWidth:0}]},
+  options:{cutout:'78%', plugins:{legend:{display:false}, tooltip:{enabled:false}}, responsive:true, maintainAspectRatio:false}
+});
+
+const termAgg = {};
+courses.forEach(c => { if(c.status==="completed") termAgg[c.term]=(termAgg[c.term]||0)+c.cu; });
+new Chart(document.getElementById('termChart'), {
+  type:'bar',
+  data:{labels:Object.keys(termAgg), datasets:[{data:Object.values(termAgg), backgroundColor:'rgba(34,211,238,0.5)', borderColor:'#22d3ee', borderWidth:1, borderRadius:6}]},
+  options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, grid:{color:'rgba(255,255,255,0.05)'}}, x:{grid:{display:false}}}, responsive:true, maintainAspectRatio:false}
+});
+
+const catAgg = {};
+courses.forEach(c => { catAgg[c.cat]=(catAgg[c.cat]||0)+c.cu; });
+new Chart(document.getElementById('catChart'), {
+  type:'bar',
+  data:{labels:Object.keys(catAgg), datasets:[{data:Object.values(catAgg), backgroundColor:['#22d3ee','#a78bfa','#34d399','#fbbf24','#f472b6'], borderRadius:6}]},
+  options:{indexAxis:'y', plugins:{legend:{display:false}}, scales:{x:{beginAtZero:true, grid:{color:'rgba(255,255,255,0.05)'}}, y:{grid:{display:false}}}, responsive:true, maintainAspectRatio:false}
+});
+
+const done = courses.filter(c => c.status==="completed" && c.date).sort((a,b) => a.date.localeCompare(b.date));
+let cum = 0;
+const timeline = done.map(c => ({x:c.date, y:(cum+=c.cu)}));
+const DEGREE_CU = 120;
+
+// Forecast calculation: linear velocity from first to last completed
+const firstDate = new Date(timeline[0].x);
+const lastDate = new Date(timeline[timeline.length-1].x);
+const firstCU = timeline[0].y;
+const lastCU = timeline[timeline.length-1].y;
+const daysElapsed = (lastDate - firstDate) / (1000*60*60*24);
+const cuPerDay = (lastCU - firstCU) / daysElapsed;
+const cuRemaining = DEGREE_CU - lastCU;
+const daysToFinish = cuRemaining / cuPerDay;
+const forecastDate = new Date(lastDate.getTime() + daysToFinish * 24*60*60*1000);
+const forecastStr = forecastDate.toISOString().slice(0,10);
+const forecastLabel = forecastDate.toLocaleString('en-US', {month:'long', year:'numeric'});
+const monthsToFinish = Math.round(daysToFinish / 30.4);
+
+// Build forecast dataset: starts from last actual point, extends to 120 CU
+const forecastPoints = [
+  {x: lastDate.toISOString().slice(0,10), y: lastCU},
+  {x: forecastStr, y: DEGREE_CU}
+];
+
+let chartMode = 'actual';
+let lineChart;
+
+function buildChart(mode) {
+  if (lineChart) lineChart.destroy();
+  const datasets = [{
+    label:'Actual', data:timeline,
+    borderColor:'#a78bfa', backgroundColor:'rgba(167,139,250,0.15)',
+    fill:true, tension:0.3, pointRadius:4, pointBackgroundColor:'#22d3ee', pointBorderColor:'#22d3ee'
+  }];
+  if (mode === 'forecast') {
+    datasets.push({
+      label:'Forecast', data:forecastPoints,
+      borderColor:'#22d3ee', borderDash:[6,6], backgroundColor:'rgba(34,211,238,0.08)',
+      fill:true, tension:0, pointRadius:5, pointBackgroundColor:'#22d3ee',
+      pointBorderColor:'#0a0f1c', pointBorderWidth:2
+    });
+  }
+  lineChart = new Chart(document.getElementById('lineChart'), {
+    type:'line',
+    data:{datasets},
+    options:{
+      parsing:{xAxisKey:'x', yAxisKey:'y'},
+      plugins:{legend:{display:mode==='forecast', position:'bottom', labels:{font:{size:10}, usePointStyle:true, pointStyle:'line'}}},
+      scales:{
+        x:{type:'category', grid:{color:'rgba(255,255,255,0.05)'}, ticks:{font:{size:10}, maxRotation:45}},
+        y:{beginAtZero:true, max:mode==='forecast'?130:undefined, grid:{color:'rgba(255,255,255,0.05)'}, title:{display:true, text:'Cumulative CU', font:{size:11}}}
+      },
+      responsive:true, maintainAspectRatio:false
+    }
+  });
+}
+buildChart('actual');
+
+const forecastNote = document.getElementById('forecastNote');
+document.querySelectorAll('.toggle-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const mode = btn.dataset.mode;
+    chartMode = mode;
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.toggle('active', b === btn));
+    buildChart(mode);
+    if (mode === 'forecast') {
+      forecastNote.innerHTML = `At current pace (~${(cuPerDay*30.4).toFixed(1)} CU/month), projected degree completion: <b>${forecastLabel}</b> · ~${monthsToFinish} months from last completed course.`;
+      forecastNote.style.display = 'block';
+    } else {
+      forecastNote.style.display = 'none';
+    }
+  });
+});
+
+const questList = document.getElementById('questList');
+const panel = document.getElementById('panel');
+const backdrop = document.getElementById('backdrop');
+const panelContent = document.getElementById('panelContent');
+
+function openPanel(course) {
+  const statusLabel = {completed:['passed','✓ Passed'], in_progress:['active','● Active — drafting and reviewing'], not_started:['queued','○ Queued for future term']}[course.status];
+  const assessLabel = course.assessment === 'OA' ? 'OA · Objective Assessment (exam)' :
+                      course.assessment === 'PA' ? 'PA · Performance Assessment (written tasks)' :
+                      'Transfer credit from outside coursework';
+  let body = `
+    <div class="panel-code">${course.code}</div>
+    <div class="panel-title">${course.name}</div>
+    <div class="panel-subtitle">${course.cu} CU · ${course.cat} · ${course.term}</div>
+    <div>
+      <span class="panel-badge ${course.assessment.toLowerCase()==='oa'?'oa':course.assessment.toLowerCase()==='pa'?'pa':'queued'}">${course.assessment}</span>
+      <span class="panel-badge ${statusLabel[0]}">${statusLabel[1]}</span>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-title">Assessment Format</div>
+      <p style="font-size:13px; color:#cbd5e1; line-height:1.6;">${assessLabel}${course.cert ? ` · Earns <b style="color:#22d3ee;">${course.cert}</b>` : ''}${course.platform ? ` · Delivered via <b style="color:#22d3ee;">${course.platform}</b>` : ''}</p>
+    </div>
+  `;
+  if (course.competencies) {
+    body += `<div class="panel-section"><div class="panel-section-title">Competencies</div>
+      <ul style="padding-left:18px; margin:0; font-size:12px; color:#cbd5e1; line-height:1.7;">
+        ${course.competencies.map(c => `<li style="margin-bottom:4px;">${c}</li>`).join('')}
+      </ul></div>`;
+  }
+  if (course.prerequisites) {
+    body += `<div class="panel-section"><div class="panel-section-title">Prerequisites</div>
+      <ul style="padding-left:18px; margin:0; font-size:12px; color:#cbd5e1; line-height:1.7;">
+        ${course.prerequisites.map(p => `<li>${p}</li>`).join('')}
+      </ul></div>`;
+  }
+  if (course.oaDetails || course.preAssessment) {
+    body += `<div class="panel-section"><div class="panel-section-title">Exam Details</div>
+      <div style="display:grid; grid-template-columns:auto 1fr; gap:6px 16px; font-size:12px; color:#cbd5e1;">`;
+    if (course.oaDetails) {
+      if (course.oaDetails.items) body += `<div style="color:#64748b;">OA items</div><div>${course.oaDetails.items}</div>`;
+      if (course.oaDetails.minutes) body += `<div style="color:#64748b;">OA time</div><div>${course.oaDetails.minutes} minutes</div>`;
+      if (course.oaDetails.code) body += `<div style="color:#64748b;">OA code</div><div style="font-family:monospace; color:#22d3ee;">${course.oaDetails.code}</div>`;
+    }
+    if (course.preAssessment) {
+      if (course.preAssessment.code) body += `<div style="color:#64748b;">Pre-assessment code</div><div style="font-family:monospace; color:#a78bfa;">${course.preAssessment.code}</div>`;
+    }
+    body += `</div></div>`;
+  }
+  if (course.paCode) {
+    body += `<div class="panel-section"><div class="panel-section-title">Assessment Code</div>
+      <p style="font-family:monospace; color:#22d3ee; font-size:13px;">${course.paCode}</p></div>`;
+  }
+  if (course.pastAttempts) {
+    body += `<div class="panel-section"><div class="panel-section-title">Past Attempts</div>`;
+    course.pastAttempts.forEach(a => {
+      const pass = a.result === 'Pass';
+      body += `<div class="task-item ${pass ? 'done' : 'pending'}" style="${pass ? '' : 'border-left-color:#ef4444;'}">
+        <div class="task-name" style="font-size:12px;">${a.type} Attempt ${a.num} — ${a.date}</div>
+        <div class="task-status" style="color:${pass ? '#34d399' : '#ef4444'};">${pass ? '✓' : '✗'} ${a.result}</div>
+      </div>`;
+    });
+    body += `</div>`;
+  }
+  if (course.tasks) {
+    body += `<div class="panel-section"><div class="panel-section-title">Tasks (${course.tasks.length})</div>`;
+    course.tasks.forEach(t => {
+      body += `<div class="task-item ${t.status}">
+        <div class="task-name">${t.name}</div>
+        <div class="task-status">${t.status === 'done' ? '✓ Drafted / submitted' : t.status === 'pending' ? '● Pending' : '○ Queued'}</div>
+        ${t.notes ? `<div class="task-notes">${t.notes}</div>` : ''}
+      </div>`;
+    });
+    body += `</div>`;
+  }
+  if (course.topics) {
+    const topicTitle = course.assessment === 'OA' ? 'Topics Covered on Exam' : 'Topics Covered';
+    body += `<div class="panel-section"><div class="panel-section-title">${topicTitle}</div>
+      <div class="topic-list">${course.topics.map(t => `<span class="topic">${t}</span>`).join('')}</div></div>`;
+  }
+  if (course.notes) {
+    body += `<div class="panel-section"><div class="panel-section-title">Notes</div>
+      <p style="font-size:12px; color:#cbd5e1; line-height:1.6; font-style:italic;">${course.notes}</p></div>`;
+  }
+  if (course.completionNote && course.status === 'completed') {
+    body += `<div class="panel-section"><div class="panel-section-title">What Was Covered</div>
+      <p style="font-size:13px; color:#cbd5e1; line-height:1.6;">${course.completionNote}</p>
+      <p style="font-size:11px; color:#64748b; margin-top:8px;">Passed on ${course.date}.</p></div>`;
+  } else if (!course.tasks && !course.topics && course.status === 'completed') {
+    body += `<div class="panel-section"><div class="panel-section-title">Outcome</div>
+      <p style="font-size:13px; color:#cbd5e1;">Course passed on ${course.date}. Full detail archived.</p></div>`;
+  }
+  if (!course.tasks && !course.topics && course.status === 'not_started') {
+    body += `<div class="panel-section"><div class="panel-section-title">Status</div>
+      <p style="font-size:13px; color:#cbd5e1;">Not yet opened in the WGU portal. Details populate once ${course.term} is active.</p></div>`;
+  }
+  panelContent.innerHTML = body;
+  panel.classList.add('open');
+  backdrop.classList.add('open');
+}
+
+function closePanel() {
+  panel.classList.remove('open');
+  backdrop.classList.remove('open');
+}
+
+document.getElementById('panelClose').addEventListener('click', closePanel);
+backdrop.addEventListener('click', closePanel);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+function renderCourses(filter) {
+  questList.innerHTML = '';
+  let filtered;
+  if (filter === 'all') filtered = courses;
+  else if (filter === 'cert') filtered = courses.filter(c => c.cert);
+  else filtered = courses.filter(c => c.status === filter);
+  filtered.forEach(c => {
+    const label = {completed:'✓ Done', in_progress:'● Active', not_started:'○ Queued'}[c.status];
+    const div = document.createElement('div');
+    div.className = 'quest ' + c.status;
+    const certBadge = c.cert ? `<div style="font-size:10px; color:#fbbf24; margin-top:6px; font-weight:600;">★ ${c.cert.split(' (')[0]}</div>` : '';
+    div.innerHTML = `
+      <div class="quest-code">${c.code}</div>
+      <div class="quest-name">${c.name}</div>
+      <div class="quest-meta">
+        <span>${c.cu} CU · ${c.term}</span>
+        <span class="quest-status">${label}</span>
+      </div>
+      ${certBadge}`;
+    div.addEventListener('click', () => openPanel(c));
+    questList.appendChild(div);
+  });
+}
+
+// Populate counts on the filter chips
+document.querySelector('.count-all').textContent = courses.length;
+document.querySelector('.count-completed').textContent = courses.filter(c => c.status === 'completed').length;
+document.querySelector('.count-in_progress').textContent = courses.filter(c => c.status === 'in_progress').length;
+document.querySelector('.count-not_started').textContent = courses.filter(c => c.status === 'not_started').length;
+document.querySelector('.count-cert').textContent = courses.filter(c => c.cert).length;
+
+// Wire up filter clicks
+document.querySelectorAll('#filters .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('#filters .chip').forEach(c => c.classList.toggle('active', c === chip));
+    renderCourses(chip.dataset.filter);
+  });
+});
+
+renderCourses('all');
+
+// ============ Roadmap detail lookups ============
+
+// ============ Career phase switcher ============
+
+function openRoadmapPanel(kind, name, extra) {
+  const typeBadge = {job:'Job Title', skill:'Skill', project:'Portfolio Project', milestone:'Milestone'}[kind];
+  const badgeClass = {job:'pa', skill:'oa', project:'pa', milestone:'queued'}[kind];
+  let body = `
+    <div class="panel-code">${typeBadge}</div>
+    <div class="panel-title">${name}</div>
+    <div class="panel-subtitle">${extra.phase ? 'Phase ' + extra.phase + ' · ' + extra.phaseName : ''}</div>
+    <div><span class="panel-badge ${badgeClass}">${typeBadge}</span></div>
+  `;
+  if (kind === 'job') {
+    const d = jobDetails[name];
+    if (d) {
+      body += `<div class="panel-section"><div class="panel-section-title">Typical Compensation</div>
+        <p style="font-size:14px; color:#34d399; font-weight:600;">${d.pay}</p></div>`;
+      body += `<div class="panel-section"><div class="panel-section-title">What the Role Is</div>
+        <p style="font-size:13px; color:#cbd5e1; line-height:1.6;">${d.desc}</p></div>`;
+      body += `<div class="panel-section"><div class="panel-section-title">Day-to-Day</div>
+        <p style="font-size:13px; color:#cbd5e1; line-height:1.6;">${d.day}</p></div>`;
+    }
+  } else if (kind === 'skill') {
+    const d = skillDetails[name];
+    const statusLabel = {go:'✓ GO',in_prog:'● IN PROGRESS',no_go:'○ NOT STARTED'}[extra.status];
+    body += `<div class="panel-section"><div class="panel-section-title">Current Status</div>
+      <p style="font-size:14px; color:#cbd5e1; font-weight:600;">${statusLabel}</p></div>`;
+    if (d) {
+      body += `<div class="panel-section"><div class="panel-section-title">Why It Matters</div>
+        <p style="font-size:13px; color:#cbd5e1; line-height:1.6;">${d.why}</p></div>`;
+      body += `<div class="panel-section"><div class="panel-section-title">Estimated Effort</div>
+        <p style="font-size:13px; color:#22d3ee; font-weight:600;">${d.hours}</p></div>`;
+      body += `<div class="panel-section"><div class="panel-section-title">Starter Resources</div>
+        <ul style="padding-left:18px; margin:0; font-size:13px; line-height:1.7;">
+          ${d.start.map(s => {
+            const label = typeof s === 'string' ? s : s.label;
+            const url = typeof s === 'string' ? null : s.url;
+            return url
+              ? `<li style="margin-bottom:6px;"><a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#22d3ee; text-decoration:none; border-bottom:1px dotted rgba(34,211,238,0.4);">${label}</a> <span style="color:#64748b; font-size:11px;">↗</span></li>`
+              : `<li style="margin-bottom:6px; color:#cbd5e1;">${label}</li>`;
+          }).join('')}
+        </ul></div>`;
+    }
+  } else if (kind === 'project') {
+    body += `<div class="panel-section"><div class="panel-section-title">Project Goal</div>
+      <p style="font-size:13px; color:#cbd5e1; line-height:1.6;">${extra.notes || ''}</p></div>`;
+    body += `<div class="panel-section"><div class="panel-section-title">Typical Deliverables</div>
+      <ul style="padding-left:18px; margin:0; font-size:13px; color:#cbd5e1; line-height:1.7;">
+        <li>Public GitHub repo with a real README (what it does, how to run it, what you learned)</li>
+        <li>Deployed demo link OR a short recorded walkthrough</li>
+        <li>Writeup — blog post, Notion page, or project section in your portfolio site</li>
+        <li>Resume bullet with a concrete outcome or metric</li>
+      </ul></div>`;
+  } else if (kind === 'milestone') {
+    const d = milestoneDetails[name];
+    if (d) {
+      body += `<div class="panel-section"><div class="panel-section-title">How to Measure</div>
+        <p style="font-size:13px; color:#cbd5e1; line-height:1.6;">${d.measure}</p></div>`;
+      body += `<div class="panel-section"><div class="panel-section-title">Dependencies</div>
+        <p style="font-size:13px; color:#cbd5e1; line-height:1.6;">${d.deps}</p></div>`;
+    }
+  }
+  panelContent.innerHTML = body;
+  panel.classList.add('open');
+  backdrop.classList.add('open');
+}
+
+
+
+function openPortfolioPanel(project) {
+  let body = `
+    <div class="panel-code">${project.eraLabel}</div>
+    <div class="panel-title">${project.title}</div>
+    <div class="panel-subtitle">${project.tag}</div>
+  `;
+  if (project.fit && project.fit.length) {
+    const fitBadges = project.fit.map(f => `<span class="fit-badge fit-${f}">${phaseFitLabels[f]}</span>`).join(' ');
+    body += `<div class="panel-section" style="margin-top:16px;"><div class="panel-section-title">Career Phase Fit</div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">${fitBadges}</div></div>`;
+  }
+  if (project.url) {
+    body += `<div class="panel-section" style="margin-top:16px;"><a href="${project.url}" target="_blank" rel="noopener noreferrer" style="display:inline-block; padding:8px 14px; background:rgba(34,211,238,0.15); border:1px solid rgba(34,211,238,0.4); border-radius:8px; color:#22d3ee; text-decoration:none; font-size:12px; font-weight:600;">View on GitHub ↗</a></div>`;
+  }
+  if (project.why) {
+    body += `<div class="panel-section">
+      <div class="panel-section-title">Why This Project</div>
+      <div style="border-left:3px solid #22d3ee; padding:12px 16px; background:rgba(34,211,238,0.05); border-radius:6px;">
+        <p style="font-size:14px; color:#e2e8f0; line-height:1.6; font-style:italic;">${project.why}</p>
+      </div>
+    </div>`;
+  }
+  body += `<div class="panel-section"><div class="panel-section-title">Goal</div>
+    <p style="font-size:13px; color:#cbd5e1; line-height:1.6;">${project.goal}</p></div>`;
+  body += `<div class="panel-section"><div class="panel-section-title">Role</div>
+    <p style="font-size:13px; color:#cbd5e1; line-height:1.6;">${project.role}</p></div>`;
+  body += `<div class="panel-section"><div class="panel-section-title">Outcome</div>
+    <p style="font-size:13px; color:#cbd5e1; line-height:1.6;">${project.outcome}</p></div>`;
+  body += `<div class="panel-section"><div class="panel-section-title">Skills Exercised</div>
+    <div class="topic-list">${project.skills.map(s => `<span class="topic">${s}</span>`).join('')}</div></div>`;
+  panelContent.innerHTML = body;
+  panel.classList.add('open');
+  backdrop.classList.add('open');
+}
+
+function renderOverview() {
+  const container = document.getElementById('phase0-content');
+  if (container.dataset.rendered) return;
+  const totalSkillsPhase1 = 12;
+  const totalSkillsPhase2 = careerPhases[2].skills.length;
+  const totalSkillsPhase3 = careerPhases[3].skills.length;
+  const totalSkills = totalSkillsPhase1 + totalSkillsPhase2 + totalSkillsPhase3;
+  const totalCerts = courses.filter(c => c.cert).length + careerPhases[3].certs.length;
+  const totalMilestones = 5 + careerPhases[2].milestones.length + careerPhases[3].milestones.length;
+  container.innerHTML = `
+    <div class="roadmap-hero" style="background:linear-gradient(135deg, rgba(167,139,250,0.1), rgba(34,211,238,0.06));">
+      <h2>The Career Arc · Army NCO → AI Architect</h2>
+      <p>Three phases, roughly six years, built on the "wizard" reputation already earned in the Army. Phase 1 is happening now at WGU. The destination is the point where people bring AI problems to you first.</p>
+      <div class="timeline">2026 Data Analyst (current) → ~2032 AI Architect (destination)</div>
+    </div>
+
+    <div class="arc-timeline">
+      <div class="arc-timeline-track">
+        <div class="arc-timeline-fill"></div>
+        <div class="arc-marker" style="left:14%;"></div>
+      </div>
+      <div class="arc-labels">
+        <span>2025 · Started</span>
+        <span style="color:#22d3ee;">You are here · Apr 2026</span>
+        <span>2032+ · Architect</span>
+      </div>
+    </div>
+
+    <div class="arc-stats">
+      <div class="arc-stat">
+        <div class="arc-stat-num">3</div>
+        <div class="arc-stat-label">Career Phases</div>
+      </div>
+      <div class="arc-stat">
+        <div class="arc-stat-num">~${totalSkills}</div>
+        <div class="arc-stat-label">Skills to Master</div>
+      </div>
+      <div class="arc-stat">
+        <div class="arc-stat-num">${totalCerts}</div>
+        <div class="arc-stat-label">Industry Certs</div>
+      </div>
+      <div class="arc-stat">
+        <div class="arc-stat-num">${totalMilestones}</div>
+        <div class="arc-stat-label">Milestones</div>
+      </div>
+    </div>
+
+    <div class="phase-cards">
+      <div class="phase-card current" data-jump="1">
+        <div class="phase-card-num">Phase 1 · You Are Here</div>
+        <div class="phase-card-title">Data Analyst</div>
+        <div class="phase-card-timeline">Now → ~2027 · Overlaps BS / MS start</div>
+        <ul class="phase-card-list">
+          <li>BS Data Analytics at WGU (42/120 CU, 35% done)</li>
+          <li>Earns: AWS CCP · CompTIA Data+ · Project+ · Udacity Nanodegree</li>
+          <li>First paid role as analyst — portfolio of 2–3 shipped projects</li>
+          <li>Python, SQL, Tableau, git — solid day-to-day</li>
+        </ul>
+      </div>
+      <div class="phase-card" data-jump="2">
+        <div class="phase-card-num">Phase 2</div>
+        <div class="phase-card-title">AI / ML Engineer</div>
+        <div class="phase-card-timeline">~2027 → 2030 · Overlaps MS</div>
+        <ul class="phase-card-list">
+          <li>MS in AI — completed or far enough in</li>
+          <li>13 new skills: PyTorch, LLMs, MLOps, Docker, vector DBs</li>
+          <li>Ship one end-to-end ML system in production</li>
+          <li>Title shift: Analyst → Engineer</li>
+        </ul>
+      </div>
+      <div class="phase-card" data-jump="3">
+        <div class="phase-card-num">Phase 3 · Destination</div>
+        <div class="phase-card-title">AI Architect</div>
+        <div class="phase-card-timeline">~2030 → 2032+ · Wizard lives here</div>
+        <ul class="phase-card-list">
+          <li>Senior → Principal → Architect scope</li>
+          <li>3 more certs: AWS SAA · AWS GenAI · Azure AI Engineer</li>
+          <li>Own one AI system end-to-end in production</li>
+          <li>Public talk or blog series — external reputation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="roadmap-section">
+        <div class="roadmap-section-title">Portfolio · Built Evidence</div>
+        <p style="font-size:12px; color:#94a3b8; margin-bottom:14px;">Real shipped work across three eras: active WGU portfolio pieces, Army systems-integration and leadership track, and the infrastructure that runs this dashboard.</p>
+        <div class="portfolio-grid" id="portfolio-grid"></div>
+        <div class="portfolio-cta">
+          <div class="portfolio-cta-text">More active and planned projects live in the vault under <b>01-projects/</b>.</div>
+          <a href="https://github.com/dT-Tb-cmd" target="_blank" rel="noopener noreferrer">GitHub Profile ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="roadmap-section">
+        <div class="roadmap-section-title">The Through-Line</div>
+        <p style="font-size:14px; color:#cbd5e1; line-height:1.7;">
+          Army taught you to take an inefficient system, redesign it so it works, document the change, and ship the result. Boomerang + CROW was textbook systems integration. Motorpool redesign was process engineering. The ROK cross-training was stakeholder translation. <b style="color:#22d3ee;">Those are the same skills architects get paid for.</b>
+        </p>
+        <p style="font-size:14px; color:#cbd5e1; line-height:1.7; margin-top:12px;">
+          The technical half (PyTorch, LLMs, ML system design) is what Phase 2 and 3 build. The leadership and systems-thinking half is already in place. The "wizard" reputation was earned once in the Army — doing it again in a new domain is a shorter climb than it looks.
+        </p>
+      </div>
+    </div>
+
+    <div class="card" style="background:linear-gradient(135deg, rgba(34,211,238,0.06), rgba(139,92,246,0.06)); border-color:rgba(34,211,238,0.25);">
+      <div class="roadmap-section" style="margin-bottom:0;">
+        <div class="roadmap-section-title">Destination</div>
+        <p style="color:#cbd5e1; font-size:14px; line-height:1.7; font-style:italic;">
+          People in your org and outside it bring AI problems to you first. The wizard reputation, transferred from the Army context to the AI one. The title catches up to the role you're already playing.
+        </p>
+      </div>
+    </div>
+  `;
+  container.querySelectorAll('[data-jump]').forEach(card => {
+    card.addEventListener('click', () => {
+      const phase = card.dataset.jump;
+      document.querySelector(`.phase-btn[data-phase="${phase}"]`).click();
+    });
+  });
+
+  // Render portfolio grid
+  const pGrid = container.querySelector('#portfolio-grid');
+  portfolio.forEach((p, idx) => {
+    const card = document.createElement('div');
+    card.className = 'portfolio-card ' + p.era;
+    const fitBadges = (p.fit || []).map(f => `<span class="fit-badge fit-${f}">${phaseFitLabels[f]}</span>`).join('');
+    card.innerHTML = `
+      <div class="portfolio-era ${p.era}">${p.eraLabel}</div>
+      <div class="portfolio-title">${p.title}</div>
+      <div class="portfolio-tag">${p.tag}</div>
+      ${p.url ? `<div class="portfolio-link">View repo ↗</div>` : ''}
+      ${fitBadges ? `<div class="fit-row"><span class="fit-label">Best fit:</span>${fitBadges}</div>` : ''}
+    `;
+    card.addEventListener('click', () => openPortfolioPanel(p));
+    pGrid.appendChild(card);
+  });
+
+  container.dataset.rendered = "1";
+}
+
+function renderRoadmap(phaseNum) {
+  const p = careerPhases[phaseNum];
+  const container = document.getElementById(`phase${phaseNum}-content`);
+  if (container.dataset.rendered) return;
+  const safe = s => s.replace(/"/g, '&quot;');
+  const skillChip = s => `<div class="skill-card ${s.status}" data-kind="skill" data-name="${safe(s.name)}" data-status="${s.status}"><div>${s.name}</div><div class="skill-status">${s.status === 'go' ? '✓ GO' : s.status === 'in_prog' ? '● IN PROGRESS' : '○ NOT STARTED'}</div></div>`;
+  container.innerHTML = `
+    <div class="roadmap-hero">
+      <h2>Phase ${p.num} · ${p.title}</h2>
+      <p>${p.subtitle}</p>
+      <div class="timeline">Target timeline: ${p.timeline}</div>
+    </div>
+    <div class="card">
+      <div class="roadmap-section">
+        <div class="roadmap-section-title">Target Job Titles</div>
+        <div class="job-title-list">${p.jobTitles.map(j => `<span class="job-title" data-kind="job" data-name="${safe(j)}">${j}</span>`).join('')}</div>
+      </div>
+    </div>
+    ${p.alreadyHave.length ? `<div class="card"><div class="roadmap-section">
+      <div class="roadmap-section-title">Already Have (carries forward)</div>
+      <ul style="padding-left:18px; margin:0; font-size:13px; color:#cbd5e1; line-height:1.8;">
+        ${p.alreadyHave.map(a => `<li style="margin-bottom:6px;">${a}</li>`).join('')}
+      </ul>
+    </div></div>` : ''}
+    <div class="card">
+      <div class="roadmap-section">
+        <div class="roadmap-section-title">Skills — Go / No-Go</div>
+        <div class="skill-grid">${p.skills.map(skillChip).join('')}</div>
+      </div>
+    </div>
+    ${p.certs.length ? `<div class="card"><div class="roadmap-section">
+      <div class="roadmap-section-title">★ Target Certifications</div>
+      <div>${p.certs.map(c => `<div class="cert-target">★ ${c}</div>`).join('')}</div>
+    </div></div>` : ''}
+    <div class="card">
+      <div class="roadmap-section">
+        <div class="roadmap-section-title">Portfolio Projects (ship 2–3)</div>
+        <div class="skill-grid">${p.projects.map(pr => `<div class="skill-card no_go" data-kind="project" data-name="${safe(pr.name)}" data-notes="${safe(pr.notes)}"><div style="font-weight:600; margin-bottom:4px;">${pr.name}</div><div style="font-size:11px; color:#94a3b8; line-height:1.5;">${pr.notes}</div></div>`).join('')}</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="roadmap-section">
+        <div class="roadmap-section-title">Milestones</div>
+        <div class="milestone-list">${p.milestones.map(m => {
+          const key = `milestone-p${phaseNum}-${m}`;
+          const done = localStorage.getItem(key) === '1';
+          return `<div class="milestone ${done ? 'done' : ''}" data-kind="milestone" data-name="${safe(m)}"><div class="milestone-check ${done ? 'checked' : ''}" data-key="${safe(key)}"></div><div class="milestone-text">${m}</div></div>`;
+        }).join('')}</div>
+      </div>
+    </div>
+    <div class="card" style="background:linear-gradient(135deg, rgba(34,211,238,0.06), rgba(139,92,246,0.06)); border-color:rgba(34,211,238,0.25);">
+      <div class="roadmap-section" style="margin-bottom:0;">
+        <div class="roadmap-section-title">Done When</div>
+        <p style="color:#cbd5e1; font-size:14px; line-height:1.6; font-style:italic;">${p.doneWhen}</p>
+      </div>
+    </div>
+  `;
+  // Checkbox toggles for milestones — stop propagation so the panel doesn't open
+  container.querySelectorAll('.milestone-check').forEach(box => {
+    box.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const key = box.dataset.key;
+      const nowChecked = !box.classList.contains('checked');
+      box.classList.toggle('checked', nowChecked);
+      box.closest('.milestone').classList.toggle('done', nowChecked);
+      if (nowChecked) localStorage.setItem(key, '1');
+      else localStorage.removeItem(key);
+    });
+  });
+
+  // Wire up click handlers for detail panels (excluding the checkbox)
+  container.querySelectorAll('[data-kind]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (e.target.closest('.milestone-check')) return;
+      const kind = el.dataset.kind;
+      const name = el.dataset.name;
+      const extra = {phase: p.num, phaseName: p.title};
+      if (kind === 'skill') extra.status = el.dataset.status;
+      if (kind === 'project') extra.notes = el.dataset.notes;
+      openRoadmapPanel(kind, name, extra);
+    });
+  });
+  container.dataset.rendered = "1";
+}
+
+document.querySelectorAll('.phase-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const phase = btn.dataset.phase;
+    document.querySelectorAll('.phase-btn').forEach(b => b.classList.toggle('active', b === btn));
+    ['phase0-content','phase1-content','phase2-content','phase3-content'].forEach(id => {
+      const el = document.getElementById(id);
+      if (id === `phase${phase}-content`) { el.classList.add('active'); el.style.display = 'block'; }
+      else { el.classList.remove('active'); el.style.display = 'none'; }
+    });
+    if (phase === '0') renderOverview();
+    else if (phase !== '1') renderRoadmap(phase);
+    const titleMap = {
+      '0': ['The Career Arc', 'Army NCO → Data Analyst → AI Engineer → AI Architect'],
+      '1': ['Degree Progress Dashboard', 'BS Data Analytics · Western Governors University'],
+      '2': ['Career Roadmap · Phase 2', 'AI / ML Engineer — middle phase'],
+      '3': ['Career Roadmap · Phase 3', 'AI Architect — destination role']
+    };
+    document.getElementById('dashTitle').textContent = titleMap[phase][0];
+    document.getElementById('dashSub').textContent = titleMap[phase][1];
+  });
+});
+</script>
+</body>
+</html>
